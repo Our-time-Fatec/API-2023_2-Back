@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import Bicicleta from '../models/Bicicleta';
 import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
+import Foto from '../models/Foto';
+import User from '../models/User';
 
 class BicicletaController {
 
@@ -55,6 +57,8 @@ class BicicletaController {
           include: [
             { model: Marca, as: 'marca' },
             { model: Modalidade, as: 'modalidade' },
+            { model: Foto, as: 'fotos' },
+            { model: User, as: 'dono'} 
           ],
         }
       );
@@ -74,6 +78,8 @@ class BicicletaController {
         include: [
           { model: Marca, as: 'marca' },
           { model: Modalidade, as: 'modalidade' },
+          { model: Foto, as: 'fotos' },
+          { model: User, as: 'dono'} 
         ],
       });
 

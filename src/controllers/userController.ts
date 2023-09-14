@@ -2,6 +2,10 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
+import Bicicleta from '../models/Bicicleta';
+import Marca from '../models/Marca';
+import Modalidade from '../models/Modalidade';
+import Foto from '../models/Foto';
 
 class UserController {
 
@@ -69,7 +73,19 @@ class UserController {
     try {
       const { id } = req.params;
 
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(id, {
+        include: [
+          { 
+            model: Bicicleta, 
+            as: 'bicicletas',
+            include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              { model: Foto, as: 'fotos' },
+            ],
+           }
+        ]
+      });
 
       if (!user) {
         return res.status(404).json({ error: 'Usuário não encontrado' });

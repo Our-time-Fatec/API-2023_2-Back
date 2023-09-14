@@ -1,8 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
 import sequelize from '../config/database';
 import Marca from './Marca';
 import Modalidade from './Modalidade';
 import User from './User';
+import Foto from './Foto';
 
 enum Generos {
   Masculino = 'Masculino',
@@ -43,6 +44,7 @@ class Bicicleta extends Model {
   public modalidadeId!: number;
   public donoId!: number;
   public avaliacao!: number;
+  public getFotos!: HasManyGetAssociationsMixin<Foto>;
 }
 
 Bicicleta.init(
@@ -118,6 +120,7 @@ Bicicleta.init(
 );
 Bicicleta.belongsTo(Marca, { foreignKey: 'marcaId', as: 'marca' });
 Bicicleta.belongsTo(Modalidade, { foreignKey: 'modalidadeId', as: 'modalidade' });
-Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono' });
+Bicicleta.hasMany(Foto, { foreignKey: 'id_bike', as: 'fotos' });
+Foto.hasMany(Bicicleta, { foreignKey: 'id_bike', as: 'bicicleta' });
 
 export default Bicicleta;

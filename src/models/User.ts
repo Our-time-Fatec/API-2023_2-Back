@@ -1,5 +1,6 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
+import Bicicleta from './Bicicleta';
 
 class User extends Model {
   public id!: number;
@@ -13,6 +14,7 @@ class User extends Model {
   public isAlugando!: boolean;
   public avaliacaoBikes!: number;
   public avaliacaoLocacoes!: number;
+  public getBicicletas!: HasManyGetAssociationsMixin<Bicicleta>;
 }
 User.init(
   {
@@ -62,5 +64,8 @@ User.init(
     modelName: 'Users',
   }
 );
+
+User.hasMany(Bicicleta, { foreignKey: 'donoId', as: 'bicicletas' });
+Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono' })
 
 export default User;
