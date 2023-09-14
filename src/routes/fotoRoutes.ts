@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
 import fotoController from "../controllers/fotoController";
+import authenticateToken from "../middlewares/Auth";
 
 const fotosRoutes = Router();
 
-fotosRoutes.post('/', fotoController.createFoto);
-fotosRoutes.get('/', fotoController.listFotos);
-fotosRoutes.get('/:id', fotoController.getFotoById);
-fotosRoutes.put('/:id', fotoController.updateFoto);
-fotosRoutes.delete('/:id', fotoController.deleteFoto);
+fotosRoutes.post('/', authenticateToken, fotoController.createFoto);
+fotosRoutes.get('/', authenticateToken, fotoController.listFotos);
+fotosRoutes.get('/:id', authenticateToken, fotoController.getFotoById);
+fotosRoutes.put('/:id', authenticateToken, fotoController.updateFoto);
+fotosRoutes.delete('/:id', authenticateToken, fotoController.deleteFoto);
 
 export default fotosRoutes;

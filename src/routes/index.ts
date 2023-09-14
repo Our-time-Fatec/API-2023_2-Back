@@ -15,10 +15,5 @@ routes.use("/modalidade", modalidadeRoutes)
 routes.use("/bicicleta", bicicletaRoutes)
 routes.use("/foto", fotosRoutes)
 routes.use("/locacao", locacaoRoutes)
-routes.get('/rota-protegida', authenticateToken, (req, res) => {
-    const userId = req.body.userId;
-    res.json({ message: `Usuário autenticado com ID ${userId}` });
-});
-
 
 export default routes;
