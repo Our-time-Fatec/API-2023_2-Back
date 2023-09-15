@@ -2,7 +2,7 @@
 
 ###  🧑‍💻- Tecnologias
 
-Tecnologias e ferramentas utilizadas no projeto: `Typescript, NodeJS / Express.js, MySql, Sequelize, Insomnia`
+Tecnologias e ferramentas utilizadas no projeto: `Typescript, NodeJS / Express.js, Postgress, Sequelize, Insomnia`
 
 ## ⚙️ - Como Executar a aplicação
 ```bash
@@ -14,7 +14,7 @@ $ cd API-BACK
 
 # renomear o arquivo chamado ".env.local" para '.env'
 
-# Utilizando o mysql Workbench crie o banco com o comando
+# Utilizando o Postgress crie o banco com o comando
 'CREATE DATABASE api_bicicleta'
 
 # No arquivo principal do projeto 'app.ts' descomente a linha 18 para criar as entidades do banco e inserir valores pre-definidos de marca e modalidade.
