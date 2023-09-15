@@ -1,20 +1,26 @@
 import { Request, Response } from 'express';
 import Foto from '../models/Foto';
+import Bicicleta from '../models/Bicicleta';
 
 class FotoController {
 
   async createFoto(req: Request, res: Response) {
     try {
-      const { url, id_bike } = req.body;
+      const { id_bike } = req.body;
+
+      const bicicleta = await Bicicleta.findByPk(id_bike);
+      if (!bicicleta) {
+        return res.status(404).json({ error: 'Bicicleta não encontrada' });
+      }
 
       const foto = await Foto.create({
-        url,
+        url: req.file?.path,
         id_bike,
       });
 
       return res.status(201).json(foto);
     } catch (error) {
-      console.error('Erro ao criar uma foto:', error);
+      console.error('Erro ao fazer upload da foto:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
     }
   }
