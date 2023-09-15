@@ -39,7 +39,8 @@ $ npm start
 |                                                                    <hr> | <hr>                       | **Controle de usuários**          |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/user/`                   | Listagem de usuários              |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/user/{userId}`           | Dados de um usuário específico    |
-|   [![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/user/register`           | Cadastro de usuários              |
+|   [![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/user/register`           | Cadastro de usuários              ||   
+[![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/user/login`           | Autenticação de usuário              |
 |    [![](https://img.shields.io/badge/PUT-9370DB?style=for-the-badge)]() | `/user/{userid}`           | Alteração do perfil do usuário    |
 | [![](https://img.shields.io/badge/DELETE-CD853F?style=for-the-badge)]() | `/user/{userId}`           | Exclusão de um usuário específico |
 |                                                                    <hr> | <hr>                       | **Controle de bicicletas**        |
