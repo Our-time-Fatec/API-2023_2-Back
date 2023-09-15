@@ -15,4 +15,4 @@ app.listen(3000, () => {
 app.use(routes);
 
 // Inicializar banco de dados e valores predefinidos
-setupDatabase();
+//setupDatabase();
