@@ -102,11 +102,16 @@ class UserController {
     try {
       const { id } = req.params;
       const { username, email, password } = req.body;
+      const userId = req.body.userId;
 
       const user = await User.findByPk(id);
 
       if (!user) {
         return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+
+      if(user.id !== userId){
+        return res.status(404).json({error: 'Você não tem permissão para editar este usuário'})
       }
 
       if (email) {
@@ -138,11 +143,16 @@ class UserController {
   async deleteUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = req.body.userId;
 
       const user = await User.findByPk(id);
 
       if (!user) {
         return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+
+      if(user.id !== userId){
+        return res.status(404).json({error: 'Você não tem permissão para excluir este usuário'})
       }
 
       await user.destroy();
