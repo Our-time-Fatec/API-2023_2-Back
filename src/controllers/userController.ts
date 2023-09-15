@@ -55,7 +55,7 @@ class UserController {
 
     const token = jwt.sign({ userId: user.id }, 'chave_secreta', { expiresIn: '1h' });
 
-    res.status(200).json({ message: 'Autenticação bem-sucedida', token });
+    res.status(200).json({ message: 'Autenticação bem-sucedida', username: user.username, token });
   };
 
   async findAllUsers(req: Request, res: Response) {
@@ -75,15 +75,15 @@ class UserController {
 
       const user = await User.findByPk(id, {
         include: [
-          { 
-            model: Bicicleta, 
+          {
+            model: Bicicleta,
             as: 'bicicletas',
             include: [
               { model: Marca, as: 'marca' },
               { model: Modalidade, as: 'modalidade' },
               { model: Foto, as: 'fotos' },
             ],
-           }
+          }
         ]
       });
 
@@ -110,8 +110,8 @@ class UserController {
         return res.status(404).json({ error: 'Usuário não encontrado' });
       }
 
-      if(user.id !== userId){
-        return res.status(404).json({error: 'Você não tem permissão para editar este usuário'})
+      if (user.id !== userId) {
+        return res.status(404).json({ error: 'Você não tem permissão para editar este usuário' })
       }
 
       if (email) {
@@ -151,8 +151,8 @@ class UserController {
         return res.status(404).json({ error: 'Usuário não encontrado' });
       }
 
-      if(user.id !== userId){
-        return res.status(404).json({error: 'Você não tem permissão para excluir este usuário'})
+      if (user.id !== userId) {
+        return res.status(404).json({ error: 'Você não tem permissão para excluir este usuário' })
       }
 
       await user.destroy();

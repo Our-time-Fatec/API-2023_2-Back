@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors())
 
 app.listen(3001, () => {
-  console.log('Servidor está executando na porta 3000.');
+  console.log('Servidor está executando na porta 3001.');
 });
 
 app.use(routes);
