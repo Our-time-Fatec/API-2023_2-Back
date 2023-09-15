@@ -62,10 +62,10 @@ Bicicleta.init(
       type: DataTypes.STRING,
     },
     valorHora: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DOUBLE ,
     },
     valorDia: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DOUBLE ,
     },
     isAlugada: {
       type: DataTypes.BOOLEAN,
@@ -85,7 +85,7 @@ Bicicleta.init(
       },
     },
     donoId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
@@ -93,7 +93,7 @@ Bicicleta.init(
       },
     },
     avaliacao: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
   },
   {

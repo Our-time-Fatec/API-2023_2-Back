@@ -21,15 +21,15 @@ Locacao.init(
       primaryKey: true,
     },
     avaliacaoDono: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.SMALLINT,
       allowNull: true,
     },
     avaliacaoLocatario: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.SMALLINT,
       allowNull: true,
     },
     locatarioId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users', 
         key: 'id', 
@@ -45,7 +45,7 @@ Locacao.init(
       allowNull: false,
     },
     bicicletaDonoId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Bicicletas',
         key: 'donoId',

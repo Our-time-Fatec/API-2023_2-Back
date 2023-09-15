@@ -19,7 +19,7 @@ class User extends Model {
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -43,20 +43,20 @@ User.init(
       type: DataTypes.STRING,
     },
     longitude: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DOUBLE ,
     },
     latitude: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DOUBLE ,
     },
     isAlugando: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     avaliacaoBikes: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
     avaliacaoLocacoes: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
   },
   {
