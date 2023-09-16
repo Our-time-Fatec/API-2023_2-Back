@@ -31,7 +31,7 @@ class UserController {
         password: hashedPassword
       });
 
-      res.status(201).json(newUser);
+      res.status(201).json({message: 'Usuario cadastrado com sucesso.'});
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
       res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -88,7 +88,7 @@ class UserController {
       });
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
       return res.status(200).json(user);
@@ -107,11 +107,11 @@ class UserController {
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
       if (user.id !== userId) {
-        return res.status(404).json({ error: 'Você não tem permissão para editar este usuário' })
+        return res.status(404).json({ error: 'Você não tem permissão para editar este usuário.' })
       }
 
       if (email) {
@@ -133,7 +133,7 @@ class UserController {
 
       await user.save();
 
-      return res.status(200).json(user);
+      return res.status(200).json({message: 'Usuario Editado com sucesso.'});
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -148,11 +148,11 @@ class UserController {
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
       if (user.id !== userId) {
-        return res.status(404).json({ error: 'Você não tem permissão para excluir este usuário' })
+        return res.status(404).json({ error: 'Você não tem permissão para excluir este usuário.' })
       }
 
       await user.destroy();
