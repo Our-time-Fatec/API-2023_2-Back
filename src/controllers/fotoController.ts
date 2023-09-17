@@ -14,7 +14,7 @@ class FotoController {
       }
 
       const foto = await Foto.create({
-        url: req.file?.path,
+        url: req.file?.filename,
         id_bike,
       });
 
