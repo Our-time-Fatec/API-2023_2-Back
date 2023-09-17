@@ -110,7 +110,7 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { username, email, password } = req.body;
+      const { username, email, password, telefone, endereco } = req.body;
       const userId = req.body.userId;
 
       const user = await User.findByPk(id);
@@ -129,15 +129,19 @@ class UserController {
         if (existingUser && existingUser.id !== user.id) {
           return res.status(400).json({ error: 'Este email já está em uso.' });
         }
-      }
-
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
+        else{
+          user.email = email
+        }
       }
 
       if (username) {
         user.username = username;
+      }
+      if (telefone) {
+        user.telefone = telefone;
+      }
+      if (endereco) {
+        user.endereco = endereco;
       }
 
       await user.save();
