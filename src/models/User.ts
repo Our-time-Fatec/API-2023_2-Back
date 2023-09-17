@@ -66,6 +66,6 @@ User.init(
 );
 
 User.hasMany(Bicicleta, { foreignKey: 'donoId', as: 'bicicletas' });
-Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono', constraints: false })
+Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono'})
 
 export default User;
