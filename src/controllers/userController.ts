@@ -11,9 +11,9 @@ class UserController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, telefone, endereco } = req.body;
 
-      if (!username || !email || !password) {
+      if (!username || !email || !password || !telefone || !endereco) {
         return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
       }
 
@@ -28,10 +28,12 @@ class UserController {
       const newUser = await User.create({
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        telefone,
+        endereco
       });
 
-      res.status(201).json({message: 'Usuario cadastrado com sucesso.'});
+      res.status(201).json({ message: 'Usuario cadastrado com sucesso.' });
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
       res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -60,7 +62,11 @@ class UserController {
 
   async findAllUsers(req: Request, res: Response) {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll({
+        attributes: {
+          exclude: ['password']
+        }
+      });
 
       return res.status(200).json(users);
     } catch (error) {
@@ -74,6 +80,9 @@ class UserController {
       const { id } = req.params;
 
       const user = await User.findByPk(id, {
+        attributes: {
+          exclude: ['password'],
+        },
         include: [
           {
             model: Bicicleta,
@@ -133,7 +142,7 @@ class UserController {
 
       await user.save();
 
-      return res.status(200).json({message: 'Usuario Editado com sucesso.'});
+      return res.status(200).json({ message: 'Usuario Editado com sucesso.' });
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });

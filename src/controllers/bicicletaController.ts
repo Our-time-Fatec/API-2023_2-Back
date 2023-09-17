@@ -58,7 +58,12 @@ class BicicletaController {
             { model: Marca, as: 'marca' },
             { model: Modalidade, as: 'modalidade' },
             { model: Foto, as: 'fotos' },
-            { model: User, as: 'dono' }
+            {
+              model: User, as: 'dono',
+              attributes: {
+                exclude: ['password'],
+              },
+            }
           ],
         }
       );
@@ -79,7 +84,12 @@ class BicicletaController {
           { model: Marca, as: 'marca' },
           { model: Modalidade, as: 'modalidade' },
           { model: Foto, as: 'fotos' },
-          { model: User, as: 'dono' }
+          {
+            model: User, as: 'dono',
+            attributes: {
+              exclude: ['password'],
+            },
+          }
         ],
       });
 
