@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Foto from '../models/Foto';
 import Bicicleta from '../models/Bicicleta';
+import multer from 'multer';
 
 class FotoController {
 
