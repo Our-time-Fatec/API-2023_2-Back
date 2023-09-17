@@ -44,14 +44,6 @@ Locacao.init(
       },
       allowNull: false,
     },
-    bicicletaDonoId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Bicicletas',
-        key: 'donoId',
-      },
-      allowNull: false,
-    },
     isAtivo: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -63,7 +55,6 @@ Locacao.init(
   }
 );
 Locacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaId', as: 'bicicleta' });
-Locacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaDonoId', as: 'bicicletaDono' });
 Locacao.belongsTo(User, { foreignKey: 'locatarioId', as: 'locatario' });
 
 export default Locacao;
