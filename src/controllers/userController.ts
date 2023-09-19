@@ -2,14 +2,18 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
+import Bicicleta from '../models/Bicicleta';
+import Marca from '../models/Marca';
+import Modalidade from '../models/Modalidade';
+import Foto from '../models/Foto';
 
 class UserController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, telefone, endereco } = req.body;
 
-      if (!username || !email || !password) {
+      if (!username || !email || !password || !telefone || !endereco) {
         return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
       }
 
@@ -24,10 +28,12 @@ class UserController {
       const newUser = await User.create({
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        telefone,
+        endereco
       });
 
-      res.status(201).json(newUser);
+      res.status(201).json({ message: 'Usuario cadastrado com sucesso.' });
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
       res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -51,12 +57,16 @@ class UserController {
 
     const token = jwt.sign({ userId: user.id }, 'chave_secreta', { expiresIn: '1h' });
 
-    res.status(200).json({ message: 'Autenticação bem-sucedida', token });
+    res.status(200).json({ message: 'Autenticação bem-sucedida', username: user.username, token });
   };
 
   async findAllUsers(req: Request, res: Response) {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll({
+        attributes: {
+          exclude: ['password']
+        }
+      });
 
       return res.status(200).json(users);
     } catch (error) {
@@ -69,10 +79,25 @@ class UserController {
     try {
       const { id } = req.params;
 
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(id, {
+        attributes: {
+          exclude: ['password'],
+        },
+        include: [
+          {
+            model: Bicicleta,
+            as: 'bicicletas',
+            include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              { model: Foto, as: 'fotos' },
+            ],
+          }
+        ]
+      });
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
       return res.status(200).json(user);
@@ -85,12 +110,17 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { username, email, password } = req.body;
+      const { username, email, password, telefone, endereco } = req.body;
+      const userId = req.body.userId;
 
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
+      }
+
+      if (user.id !== userId) {
+        return res.status(404).json({ error: 'Você não tem permissão para editar este usuário.' })
       }
 
       if (email) {
@@ -99,20 +129,24 @@ class UserController {
         if (existingUser && existingUser.id !== user.id) {
           return res.status(400).json({ error: 'Este email já está em uso.' });
         }
-      }
-
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
+        else{
+          user.email = email
+        }
       }
 
       if (username) {
         user.username = username;
       }
+      if (telefone) {
+        user.telefone = telefone;
+      }
+      if (endereco) {
+        user.endereco = endereco;
+      }
 
       await user.save();
 
-      return res.status(200).json(user);
+      return res.status(200).json({ message: 'Usuario Editado com sucesso.' });
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -122,11 +156,16 @@ class UserController {
   async deleteUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = req.body.userId;
 
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
+      }
+
+      if (user.id !== userId) {
+        return res.status(404).json({ error: 'Você não tem permissão para excluir este usuário.' })
       }
 
       await user.destroy();

@@ -21,15 +21,15 @@ Locacao.init(
       primaryKey: true,
     },
     avaliacaoDono: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.SMALLINT,
       allowNull: true,
     },
     avaliacaoLocatario: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.SMALLINT,
       allowNull: true,
     },
     locatarioId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users', 
         key: 'id', 
@@ -44,14 +44,6 @@ Locacao.init(
       },
       allowNull: false,
     },
-    bicicletaDonoId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      references: {
-        model: 'Bicicletas',
-        key: 'donoId',
-      },
-      allowNull: false,
-    },
     isAtivo: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -63,7 +55,6 @@ Locacao.init(
   }
 );
 Locacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaId', as: 'bicicleta' });
-Locacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaDonoId', as: 'bicicletaDono' });
 Locacao.belongsTo(User, { foreignKey: 'locatarioId', as: 'locatario' });
 
 export default Locacao;

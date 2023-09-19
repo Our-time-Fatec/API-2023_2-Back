@@ -1,5 +1,6 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
+import Bicicleta from './Bicicleta';
 
 class User extends Model {
   public id!: number;
@@ -13,11 +14,12 @@ class User extends Model {
   public isAlugando!: boolean;
   public avaliacaoBikes!: number;
   public avaliacaoLocacoes!: number;
+  public getBicicletas!: HasManyGetAssociationsMixin<Bicicleta>;
 }
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -41,20 +43,20 @@ User.init(
       type: DataTypes.STRING,
     },
     longitude: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DOUBLE ,
     },
     latitude: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DOUBLE ,
     },
     isAlugando: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     avaliacaoBikes: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
     avaliacaoLocacoes: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
   },
   {
@@ -62,5 +64,8 @@ User.init(
     modelName: 'Users',
   }
 );
+
+User.hasMany(Bicicleta, { foreignKey: 'donoId', as: 'bicicletas' });
+Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono'})
 
 export default User;

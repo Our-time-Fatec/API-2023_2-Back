@@ -1,30 +1,14 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, HasManyGetAssociationsMixin } from 'sequelize';
 import sequelize from '../config/database';
 import Marca from './Marca';
 import Modalidade from './Modalidade';
 import User from './User';
-
-enum Generos {
-  Masculino = 'Masculino',
-  Feminino = 'Feminino',
-  Unissex = 'Unissex',
-}
-
-enum Marchas {
-  M18 = '18',
-  M21 = '21',
-  M24 = '24',
-  M27 = '27',
-}
-
-enum Aro {
-  A20 = '20',
-  A24 = '24',
-  A26 = '26',
-  A275 = '27.5',
-  A29 = '29',
-  A700 = '700',
-}
+import Foto from './Foto';
+import Aro from '../enums/Aro';
+import Generos from '../enums/Genero';
+import Marchas from '../enums/Marcha';
+import Suspensao from '../enums/Suspensao';
+import Material from '../enums/Material';
 
 class Bicicleta extends Model {
   public id!: number;
@@ -33,8 +17,8 @@ class Bicicleta extends Model {
   public generos!: Generos;
   public marchas!: Marchas;
   public aro!: Aro;
-  public material!: string;
-  public suspensao!: string;
+  public material!: Material;
+  public suspensao!: Suspensao;
   public descricao!: string;
   public valorHora!: number;
   public valorDia!: number;
@@ -43,6 +27,7 @@ class Bicicleta extends Model {
   public modalidadeId!: number;
   public donoId!: number;
   public avaliacao!: number;
+  public getFotos!: HasManyGetAssociationsMixin<Foto>;
 }
 
 Bicicleta.init(
@@ -68,19 +53,19 @@ Bicicleta.init(
       type: DataTypes.ENUM(...Object.values(Aro)),
     },
     material: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...Object.values(Material)),
     },
     suspensao: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...Object.values(Suspensao)),
     },
     descricao: {
       type: DataTypes.STRING,
     },
     valorHora: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DOUBLE ,
     },
     valorDia: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DOUBLE ,
     },
     isAlugada: {
       type: DataTypes.BOOLEAN,
@@ -100,7 +85,7 @@ Bicicleta.init(
       },
     },
     donoId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
@@ -108,7 +93,7 @@ Bicicleta.init(
       },
     },
     avaliacao: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.SMALLINT,
     },
   },
   {
@@ -118,6 +103,7 @@ Bicicleta.init(
 );
 Bicicleta.belongsTo(Marca, { foreignKey: 'marcaId', as: 'marca' });
 Bicicleta.belongsTo(Modalidade, { foreignKey: 'modalidadeId', as: 'modalidade' });
-Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono' });
+Bicicleta.hasMany(Foto, { foreignKey: 'id_bike', as: 'fotos' });
+Foto.hasMany(Bicicleta, { foreignKey: 'id_bike', as: 'bicicleta' });
 
 export default Bicicleta;

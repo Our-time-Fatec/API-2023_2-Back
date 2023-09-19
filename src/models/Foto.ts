@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
-import Bicicleta from './Bicicleta';
+
 
 class Foto extends Model {
     public id!: number;
@@ -32,7 +32,5 @@ Foto.init(
         tableName: 'Fotos',
     }
 );
-Foto.belongsTo(Bicicleta, { foreignKey: 'id_bike', as: 'bicicleta' });
-
 
 export default Foto;

@@ -2,11 +2,14 @@ import { Request, Response } from 'express';
 import Bicicleta from '../models/Bicicleta';
 import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
+import Foto from '../models/Foto';
+import User from '../models/User';
 
 class BicicletaController {
 
   async createBicicleta(req: Request, res: Response) {
     try {
+      const userId = req.body.userId;
       const {
         tamanho,
         cor,
@@ -20,8 +23,7 @@ class BicicletaController {
         valorDia,
         isAlugada,
         marcaId,
-        modalidadeId,
-        donoId
+        modalidadeId
       } = req.body;
 
       const bicicleta = await Bicicleta.create({
@@ -38,7 +40,7 @@ class BicicletaController {
         isAlugada,
         marcaId,
         modalidadeId,
-        donoId
+        donoId: userId
       });
 
       return res.status(201).json(bicicleta);
@@ -55,6 +57,13 @@ class BicicletaController {
           include: [
             { model: Marca, as: 'marca' },
             { model: Modalidade, as: 'modalidade' },
+            { model: Foto, as: 'fotos' },
+            {
+              model: User, as: 'dono',
+              attributes: {
+                exclude: ['password'],
+              },
+            }
           ],
         }
       );
@@ -74,6 +83,13 @@ class BicicletaController {
         include: [
           { model: Marca, as: 'marca' },
           { model: Modalidade, as: 'modalidade' },
+          { model: Foto, as: 'fotos' },
+          {
+            model: User, as: 'dono',
+            attributes: {
+              exclude: ['password'],
+            },
+          }
         ],
       });
 
@@ -92,6 +108,7 @@ class BicicletaController {
   async updateBicicleta(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = req.body.userId;
       const {
         tamanho,
         cor,
@@ -106,7 +123,6 @@ class BicicletaController {
         isAlugada,
         marcaId,
         modalidadeId,
-        donoId,
         avaliacao,
       } = req.body;
 
@@ -114,6 +130,10 @@ class BicicletaController {
 
       if (!bicicleta) {
         return res.status(404).json({ error: 'Bicicleta não encontrada' });
+      }
+
+      if (bicicleta.donoId !== userId) {
+        return res.status(403).json({ error: 'Você não tem permissão para editar esta bicicleta' });
       }
 
       bicicleta.tamanho = tamanho;
@@ -129,7 +149,6 @@ class BicicletaController {
       bicicleta.isAlugada = isAlugada;
       bicicleta.marcaId = marcaId;
       bicicleta.modalidadeId = modalidadeId;
-      bicicleta.donoId = donoId;
       bicicleta.avaliacao = avaliacao;
 
       await bicicleta.save();
@@ -144,11 +163,16 @@ class BicicletaController {
   async deleteBicicleta(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = req.body.userId;
 
       const bicicleta = await Bicicleta.findByPk(id);
 
       if (!bicicleta) {
         return res.status(404).json({ error: 'Bicicleta não encontrada' });
+      }
+
+      if (bicicleta.donoId !== userId) {
+        return res.status(403).json({ error: 'Você não tem permissão para excluir esta bicicleta' });
       }
 
       await bicicleta.destroy();
