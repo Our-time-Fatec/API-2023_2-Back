@@ -7,6 +7,7 @@ import setupDatabase from './config/setup';
 
 config()
 const diretorio = process.env.FOLDERPHOTOS2 || '';
+const port = process.env.PORT || 3001;
 const imagesDir = path.join(__dirname, diretorio)
 
 const app = express();
@@ -16,8 +17,8 @@ app.use(json());
 app.use('/images', express.static(imagesDir))
 app.use(routes);
 
-app.listen(3001, () => {
-  console.log('Servidor está executando na porta 3001.');
+app.listen(port, () => {
+  console.log(`Servidor está executando na porta ${port}.`);
 });
 
 

@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/app",
-    "dev": "ts-node-dev ./src/app"
+    "start": "node ./buid/app",
+    "dev": "ts-node-dev ./src/app",
+    "build": "tsc"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
