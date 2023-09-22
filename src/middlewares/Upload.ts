@@ -1,16 +1,19 @@
 import multer from 'multer';
-import AWS from 'aws-sdk';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { AwsCredentialIdentity } from '@aws-sdk/types';
 import path from 'path';
 
-const diretorio = process.env.FOLDERPHOTOS || '';
+const customCredentials: AwsCredentialIdentity = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+};
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const s3Client = new S3Client({
+  credentials: customCredentials, 
   region: process.env.AWS_REGION,
 });
 
-const storage = multer.memoryStorage(); 
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const uploadToS3 = (file: Express.Multer.File) => {
@@ -28,13 +31,13 @@ const uploadToS3 = (file: Express.Multer.File) => {
       ACL: 'public-read',
     };
 
-    s3.upload(params, (err: any, data: any) => {
-      if (err) {
+    s3Client.send(new PutObjectCommand(params))
+      .then((data) => {
+        resolve(`https://api2023awsbucket.s3.amazonaws.com/${filename}`);
+      })
+      .catch((err) => {
         reject(err);
-      } else {
-        resolve(data.Location); 
-      }
-    });
+      });
   });
 };
 
