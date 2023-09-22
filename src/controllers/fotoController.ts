@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import Foto from '../models/Foto';
 import Bicicleta from '../models/Bicicleta';
-import multer from 'multer';
 
 class FotoController {
 
-  async createFoto(req: Request, res: Response) {
+  async createFoto(req: Request, res: Response, fileUrl: string) {
     try {
       const { id_bike } = req.body;
 
@@ -14,8 +13,10 @@ class FotoController {
         return res.status(404).json({ error: 'Bicicleta não encontrada' });
       }
 
+      const url = fileUrl;
+
       const foto = await Foto.create({
-        url: req.file?.filename,
+        url,
         id_bike,
       });
 
