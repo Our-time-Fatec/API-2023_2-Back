@@ -19,10 +19,6 @@ fotosRoutes.post('/upload', authenticateToken, upload.single('file'), async (req
   }
 });
 
-
-// fotosRoutes.get('/', authenticateToken, fotoController.listFotos);
-// fotosRoutes.get('/:id', authenticateToken, fotoController.getFotoById);
-// fotosRoutes.put('/:id', authenticateToken, fotoController.updateFoto);
 fotosRoutes.delete('/:id', authenticateToken, fotoController.deleteFoto);
 
 export default fotosRoutes;
