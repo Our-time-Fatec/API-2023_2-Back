@@ -21,7 +21,6 @@ class BicicletaController {
         descricao,
         valorHora,
         valorDia,
-        isAlugada,
         marcaId,
         modalidadeId
       } = req.body;
@@ -37,13 +36,13 @@ class BicicletaController {
         descricao,
         valorHora,
         valorDia,
-        isAlugada,
+        isAlugada: false,
         marcaId,
         modalidadeId,
         donoId: userId
       });
 
-      return res.status(201).json(bicicleta);
+      return res.status(201).json({ message: "Bicicleta criada com sucesso", bikeId: bicicleta.id });
     } catch (error) {
       console.error('Erro ao criar uma bicicleta:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
