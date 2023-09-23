@@ -25,6 +25,10 @@ class BicicletaController {
         modalidadeId
       } = req.body;
 
+      if (!tamanho || !cor || !generos || !marchas || !aro || !material || !suspensao || !descricao || !valorHora || !valorDia || !marcaId || !modalidadeId) {
+        return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+      }
+
       const bicicleta = await Bicicleta.create({
         tamanho,
         cor,
