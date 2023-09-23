@@ -41,9 +41,9 @@ class UserController {
   }
 
   async loginUser(req: Request, res: Response) {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ message: 'Usuário não encontrado' });
