@@ -1,6 +1,7 @@
 import multer from 'multer';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
+import { Request, Response } from 'express';
 import path from 'path';
 
 const customCredentials: AwsCredentialIdentity = {
@@ -9,12 +10,23 @@ const customCredentials: AwsCredentialIdentity = {
 };
 
 const s3Client = new S3Client({
-  credentials: customCredentials, 
+  credentials: customCredentials,
   region: process.env.AWS_REGION,
 });
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+
+const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
 
 const uploadToS3 = (file: Express.Multer.File) => {
   return new Promise<string>((resolve, reject) => {
