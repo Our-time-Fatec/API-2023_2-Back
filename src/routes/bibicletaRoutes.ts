@@ -7,6 +7,7 @@ const bicicletaRoutes = Router();
 bicicletaRoutes.post('/', authenticateToken, bicicletaController.createBicicleta);
 bicicletaRoutes.get('/', bicicletaController.listBicicletas);
 bicicletaRoutes.get('/:id', bicicletaController.getBicicletaById);
+bicicletaRoutes.get('/:id/:donoId', bicicletaController.getBicicletaByIdDonoID);
 bicicletaRoutes.put('/:id', authenticateToken, bicicletaController.updateBicicleta);
 bicicletaRoutes.delete('/:id', authenticateToken, bicicletaController.deleteBicicleta);
 

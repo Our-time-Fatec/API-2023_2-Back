@@ -80,7 +80,7 @@ class BicicletaController {
 
   async getBicicletaById(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id, donoId } = req.params;
 
       const bicicleta = await Bicicleta.findByPk(id, {
         include: [
@@ -96,6 +96,40 @@ class BicicletaController {
         ],
       });
 
+
+      if (!bicicleta) {
+        return res.status(404).json({ error: 'Bicicleta não encontrada' });
+      }
+
+      return res.status(200).json(bicicleta);
+    } catch (error) {
+      console.error('Erro ao buscar uma bicicleta:', error);
+      return res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
+  }
+
+  async getBicicletaByIdDonoID(req: Request, res: Response) {
+    try {
+      const { id, donoId } = req.params;
+
+      const bicicleta = await Bicicleta.findOne({
+        where: {
+          id,
+          donoId,
+        },
+        include: [
+          { model: Marca, as: 'marca' },
+          { model: Modalidade, as: 'modalidade' },
+          { model: Foto, as: 'fotos' },
+          {
+            model: User,
+            as: 'dono',
+            attributes: {
+              exclude: ['password'],
+            },
+          },
+        ],
+      });
 
       if (!bicicleta) {
         return res.status(404).json({ error: 'Bicicleta não encontrada' });
