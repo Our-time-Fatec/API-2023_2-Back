@@ -2,7 +2,7 @@
 
 ###  🧑‍💻- Tecnologias
 
-Tecnologias e ferramentas utilizadas no projeto: `Typescript, NodeJS / Express.js, Postgress, Sequelize, Insomnia`
+Tecnologias e ferramentas utilizadas no projeto: `Typescript, NodeJS / Express.js, Postgress, Sequelize, AWS S3, Insomnia`
 
 ## ⚙️ - Como Executar a aplicação
 ```bash
@@ -45,7 +45,8 @@ $ npm start
 | [![](https://img.shields.io/badge/DELETE-CD853F?style=for-the-badge)]() | `/user/{userId}`           | Exclusão de um usuário específico |
 |                                                                    <hr> | <hr>                       | **Controle de bicicletas**        |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/bicicleta/`              | Listagem de bicicletas            |
-|    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/bicicleta/{bicicletaId}` | Dados de uma bicicleta específico |
+|    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/bicicleta/{bicicletaId}` | Dados de uma bicicleta específica |
+|    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/bicicleta/{bicicletaId}/{donoid}` | Dados de uma bicicleta específica de um dono específico|
 |   [![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/bicicleta/`              | Cadastro de bicicleta             |
 |    [![](https://img.shields.io/badge/PUT-9370DB?style=for-the-badge)]() | `/bicicleta/{bicicletaId}` | Alteração de bicicleta            |
 | [![](https://img.shields.io/badge/DELETE-CD853F?style=for-the-badge)]() | `/bicicleta/{bicicletaId}` | Exclusão de uma bicicleta         |
