@@ -21,10 +21,13 @@ class BicicletaController {
         descricao,
         valorHora,
         valorDia,
-        isAlugada,
         marcaId,
         modalidadeId
       } = req.body;
+
+      if (!tamanho || !cor || !generos || !marchas || !aro || !material || !suspensao || !descricao || !valorHora || !valorDia || !marcaId || !modalidadeId) {
+        return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+      }
 
       const bicicleta = await Bicicleta.create({
         tamanho,
@@ -37,13 +40,13 @@ class BicicletaController {
         descricao,
         valorHora,
         valorDia,
-        isAlugada,
+        isAlugada: false,
         marcaId,
         modalidadeId,
         donoId: userId
       });
 
-      return res.status(201).json(bicicleta);
+      return res.status(201).json({ message: "Bicicleta criada com sucesso", bikeId: bicicleta.id });
     } catch (error) {
       console.error('Erro ao criar uma bicicleta:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
@@ -77,7 +80,7 @@ class BicicletaController {
 
   async getBicicletaById(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id, donoId } = req.params;
 
       const bicicleta = await Bicicleta.findByPk(id, {
         include: [
@@ -93,6 +96,40 @@ class BicicletaController {
         ],
       });
 
+
+      if (!bicicleta) {
+        return res.status(404).json({ error: 'Bicicleta não encontrada' });
+      }
+
+      return res.status(200).json(bicicleta);
+    } catch (error) {
+      console.error('Erro ao buscar uma bicicleta:', error);
+      return res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
+  }
+
+  async getBicicletaByIdDonoID(req: Request, res: Response) {
+    try {
+      const { id, donoId } = req.params;
+
+      const bicicleta = await Bicicleta.findOne({
+        where: {
+          id,
+          donoId,
+        },
+        include: [
+          { model: Marca, as: 'marca' },
+          { model: Modalidade, as: 'modalidade' },
+          { model: Foto, as: 'fotos' },
+          {
+            model: User,
+            as: 'dono',
+            attributes: {
+              exclude: ['password'],
+            },
+          },
+        ],
+      });
 
       if (!bicicleta) {
         return res.status(404).json({ error: 'Bicicleta não encontrada' });
@@ -153,7 +190,7 @@ class BicicletaController {
 
       await bicicleta.save();
 
-      return res.status(200).json(bicicleta);
+      return res.status(200).json({ message: 'Bicicleta editada com sucesso.' });
     } catch (error) {
       console.error('Erro ao atualizar uma bicicleta:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
