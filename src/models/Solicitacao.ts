@@ -1,6 +1,7 @@
 import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
 import Bicicleta from './Bicicleta';
+import DouH from '../enums/Data_ou_Hora';
 
 class Solicitacao extends Model{
     public id!: number;
@@ -8,7 +9,7 @@ class Solicitacao extends Model{
     public isRespondido!: boolean;
     public isAceito!: boolean;
     public bicicletaId!: number;
-    public DataouHora!: Date;
+    public DataouHora!: DouH;
 }
 
 Solicitacao.init(
@@ -40,7 +41,7 @@ Solicitacao.init(
             allowNull: false,
         },
         DataouHora: {
-            type: DataTypes.DATE,  
+            type: DataTypes.ENUM(...Object.values(DouH)),  
         },
     },
     {
