@@ -5,6 +5,8 @@ import SolicitacaoController from "../controllers/SolicitacaoController";
 const solicitacaoRoutes = Router()
 
 solicitacaoRoutes.post('/', authenticateToken, SolicitacaoController.createSolicitacao);
+// solicitacaoRoutes.post('/:id', authenticateToken, SolicitacaoController.solicitacaoAceita);
+// solicitacaoRoutes.post('/:id', authenticateToken, SolicitacaoController.solicitacaoRecusada);
 solicitacaoRoutes.get('/:id', authenticateToken, SolicitacaoController.minhaSolicitacao);
 solicitacaoRoutes.get('/:id', authenticateToken, SolicitacaoController.solicitacaoRecebida);
 // solicitacaoRoutes.put('/:id', authenticateToken, SolicitacaoController);
