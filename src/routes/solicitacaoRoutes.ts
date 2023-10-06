@@ -1,15 +1,15 @@
 import { Router, Request, Response } from "express";
 import authenticateToken from "../middlewares/Auth";
-import SolicitacaoController from "../controllers/SolicitacaoController";
+import solicitacaoController from "../controllers/SolicitacaoController";
 
 const solicitacaoRoutes = Router()
 
-solicitacaoRoutes.post('/', authenticateToken, SolicitacaoController.createSolicitacao);
-// solicitacaoRoutes.post('/:id', authenticateToken, SolicitacaoController.solicitacaoAceita);
-// solicitacaoRoutes.post('/:id', authenticateToken, SolicitacaoController.solicitacaoRecusada);
-solicitacaoRoutes.get('/:id', authenticateToken, SolicitacaoController.minhaSolicitacao);
-solicitacaoRoutes.get('/:id', authenticateToken, SolicitacaoController.solicitacaoRecebida);
-// solicitacaoRoutes.put('/:id', authenticateToken, SolicitacaoController);
-// solicitacaoRoutes.delete('/:id', authenticateToken, SolicitacaoController);
+solicitacaoRoutes.put('/', authenticateToken, solicitacaoController.createSolicitacao);
+// solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoAceita);
+// solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoRecusada);
+solicitacaoRoutes.get('/:id', authenticateToken, solicitacaoController.minhaSolicitacao);
+solicitacaoRoutes.get('/:id', authenticateToken, solicitacaoController.solicitacaoRecebida);
+// solicitacaoRoutes.put('/:id', authenticateToken, solicitacaoController);
+// solicitacaoRoutes.delete('/:id', authenticateToken, solicitacaoController);
 
 export default solicitacaoRoutes
