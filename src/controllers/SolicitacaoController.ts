@@ -8,13 +8,13 @@ class SolicitacaoController {
         const idLocador = req.body.idLocador;
         const {
             DataouHora
-        } = req.body
+        } = req.body;
         const solicitacao = await Solicitacao.create({
             idLocador,
             DataouHora,
             isAlugada: false
         });
-        return res.status(201).json({message:"Solicitação enviada com sucesso"});
+        return res.status(200).json({message:"Solicitação enviada com sucesso"});
         }catch (error){
             console.error('Erro ao enviar a solicitação', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
@@ -24,9 +24,12 @@ class SolicitacaoController {
     async minhaSolicitacao(req: Request, res: Response){
         try{
             const isRespondido = req.body
-
-            const solicitacoes = await Solicitacao.findByPk(id, {
+            const{
+                idLocador
+            } = req.body;
+            const solicitacoes = await Solicitacao.findByPk(idLocador, {
                 include: [
+                    { model: Solicitacao, as: 'solicitacao'}
                 ]
             })
         }
