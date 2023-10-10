@@ -18,4 +18,4 @@ app.listen(port, () => {
 
 
 // Inicializar banco de dados e valores predefinidos
-//setupDatabase();
+setupDatabase();

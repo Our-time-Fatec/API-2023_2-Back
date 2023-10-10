@@ -21,8 +21,10 @@ Solicitacao.init(
         },
         idLocador: {
             type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
+            references:{
+                model: 'Users',
+                key: 'id',
+            }
         },
         isRespondido: {
             type: DataTypes.BOOLEAN,

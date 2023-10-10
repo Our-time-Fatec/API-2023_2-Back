@@ -12,7 +12,7 @@ class SolicitacaoController {
         const solicitacao = await Solicitacao.create({
             idLocador,
             DataouHora,
-            isAlugada: false
+            isRespondido: false
         });
         return res.status(200).json({message:"Solicitação enviada com sucesso"});
         }catch (error){
@@ -29,12 +29,12 @@ class SolicitacaoController {
             } = req.body;
             const solicitacoes = await Solicitacao.findByPk(idLocador, {
                 include: [
-                    { model: Solicitacao, as: 'solicitacao'}
+                    { model: Bicicleta, as: 'bicicleta'}
                 ]
             });
-            return res.status(200).json({message:"Solicitação enviada com sucesso"});
+            return res.status(200).json({solicitacoes});
         }catch (error){
-            console.error('Erro ao enviar a solicitação', error);
+            console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
         }
     }
