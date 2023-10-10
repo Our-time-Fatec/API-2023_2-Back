@@ -31,7 +31,11 @@ class SolicitacaoController {
                 include: [
                     { model: Solicitacao, as: 'solicitacao'}
                 ]
-            })
+            });
+            return res.status(200).json({message:"Solicitação enviada com sucesso"});
+        }catch (error){
+            console.error('Erro ao enviar a solicitação', error);
+            return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
         }
     }
 
