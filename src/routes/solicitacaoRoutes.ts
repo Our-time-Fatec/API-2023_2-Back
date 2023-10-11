@@ -4,7 +4,7 @@ import solicitacaoController from "../controllers/SolicitacaoController";
 
 const solicitacaoRoutes = Router()
 
-solicitacaoRoutes.post('/',solicitacaoController.createSolicitacao);
+solicitacaoRoutes.post('/', authenticateToken, solicitacaoController.createSolicitacao);
 // solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoAceita);
 // solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoRecusada);
 solicitacaoRoutes.get('/:id/:idLocador', authenticateToken, solicitacaoController.minhaSolicitacao);
