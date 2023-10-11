@@ -1,10 +1,12 @@
 import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
 import Bicicleta from './Bicicleta';
+import User from './User';
 import DouH from '../enums/Data_ou_Hora';
+import { AllowNull } from 'sequelize-typescript';
 
 class Solicitacao extends Model{
-    public id!: number;
+    public idSolicitacao!: number;
     public idLocador!: number;
     public isRespondido!: boolean;
     public isAceito!: boolean;
@@ -14,7 +16,7 @@ class Solicitacao extends Model{
 
 Solicitacao.init(
     {
-        id: {
+        idSolicitacao: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
@@ -24,7 +26,8 @@ Solicitacao.init(
             references:{
                 model: 'Users',
                 key: 'id',
-            }
+            },
+            allowNull: false,
         },
         isRespondido: {
             type: DataTypes.BOOLEAN,
@@ -52,5 +55,6 @@ Solicitacao.init(
     }
 );
 Solicitacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaId', as: 'bicicleta' });
+Solicitacao.belongsTo(User, {foreignKey: 'idLocador', as: 'id'})
 
 export default Solicitacao;
