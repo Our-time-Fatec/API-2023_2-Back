@@ -26,22 +26,12 @@ class SolicitacaoController {
 
     async minhaSolicitacao(req: Request, res: Response){
         try{
-            const isRespondido = req.body
-            const{
-                idLocador,
-                idBicicleta,
-            } = req.body;
-            const solicitacoes = await Solicitacao.findAll({
-                include: [
-                    { model: Bicicleta, as: 'bicicleta'},
-                    { model:User, as: 'dono',
-                    attributes: {
-                        exclude: ['password'],
-                    },
+            const solicitacao = await Solicitacao.findAll({
+                attributes: {
+                    exclude: ['idLocador','isAceito','isRespondido'],
                 }
-                ],
             });
-            return res.status(200).json({solicitacoes});
+            return res.status(200).json({solicitacao});
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
