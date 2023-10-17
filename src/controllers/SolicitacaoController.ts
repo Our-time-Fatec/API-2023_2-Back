@@ -9,13 +9,11 @@ class SolicitacaoController {
         const {
             DataouHora,
             idLocador,
-            isRespondido,
 
         } = req.body;
         const solicitacao = await Solicitacao.create({
             idLocador,
             DataouHora,
-            isRespondido: false
         });
         return res.status(200).json({message:"Solicitação enviada com sucesso"});
         }catch (error){
@@ -26,10 +24,13 @@ class SolicitacaoController {
 
     async minhaSolicitacao(req: Request, res: Response){
         try{
-            const solicitacao = await Solicitacao.findAll({
-                attributes: {
-                    exclude: ['idLocador','isAceito','isRespondido'],
-                }
+            const solicitacao = await Solicitacao.findAll(
+            {
+                include: [
+                    { model: User, as: 'Pessoa',
+                        attributes: {
+                          exclude: ['password'],
+                        }}],
             });
             return res.status(200).json({solicitacao});
         }catch (error){
