@@ -22,41 +22,32 @@ class SolicitacaoController {
         }
     }
 
-    async recebeSolicitacao(req: Request, res: Response){
+    async solicitacaoFeita(req: Request, res: Response){
         try{
-            const {idLocador: donoId,} = req.params;
-            const solicitacaoRecebida = await Solicitacao.findOne({
-                where: {
-                    donoId,
+            const {donoId: idLocador} = req.body
+            const solicitacaoFeita = await Solicitacao.findOne({
+                where:{
+                    idLocador,
                 }
-            })
-            
-            if (!solicitacaoRecebida) {
-                return res.status(404).json({error: 'Erro ao buscar solicitações recebidas'});
+            });
+
+            if(!solicitacaoFeita){
+                return res.status(500).json({error: 'Erro ao buscar a solicitacao enviada'})
             }
-            
-            
-            return res.status(200).json({solicitacaoRecebida});
+        
+            return res.status(200).json({solicitacaoFeita});
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
         }
     }
 
-    async feitasSolicitacao(req: Request, res:Response){
-        try{
-            const {idLocador} = req.params;
-            const solicitacaoFeita = await Solicitacao.findByPk(idLocador)
-            if(!solicitacaoFeita) {
-                return res.status(404).json({error: 'Erro durante a buscas de suas solicitações feitas'});
-            }
-                return res.status(200).json({solicitacaoFeita});
-        }catch (error){
-            console.error('Erro na busca', error);
-            return res.status(500).json({error: 'Erro interno de servidor'});
-        }
+    async solicitacaoRecebida(req: Request, res: Response){
+
     }
 }
 
 export default new SolicitacaoController();
 
+// feitas = locadorId
+// recebidas = donoId
