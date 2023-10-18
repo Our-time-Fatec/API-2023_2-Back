@@ -22,25 +22,39 @@ class SolicitacaoController {
         }
     }
 
-    async minhaSolicitacao(req: Request, res: Response){
+    async recebeSolicitacao(req: Request, res: Response){
         try{
-            const solicitacao = await Solicitacao.findAll(
-            {
-                include: [
-                    { model: User, as: 'Pessoa',
-                        attributes: {
-                          exclude: ['password'],
-                        }}],
-            });
-            return res.status(200).json({solicitacao});
+            const {idLocador: donoId,} = req.params;
+            const solicitacaoRecebida = await Solicitacao.findOne({
+                where: {
+                    donoId,
+                }
+            })
+            
+            if (!solicitacaoRecebida) {
+                return res.status(404).json({error: 'Erro ao buscar solicitações recebidas'});
+            }
+            
+            
+            return res.status(200).json({solicitacaoRecebida});
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
         }
     }
 
-    async solicitacaoRecebida(req: Request, res: Response){
-
+    async feitasSolicitacao(req: Request, res:Response){
+        try{
+            const {idLocador} = req.params;
+            const solicitacaoFeita = await Solicitacao.findByPk(idLocador)
+            if(!solicitacaoFeita) {
+                return res.status(404).json({error: 'Erro durante a buscas de suas solicitações feitas'});
+            }
+                return res.status(200).json({solicitacaoFeita});
+        }catch (error){
+            console.error('Erro na busca', error);
+            return res.status(500).json({error: 'Erro interno de servidor'});
+        }
     }
 }
 
