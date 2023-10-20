@@ -4,10 +4,10 @@ import solicitacaoController from "../controllers/SolicitacaoController";
 
 const solicitacaoRoutes = Router()
 
-solicitacaoRoutes.get('/:idLocador', authenticateToken, solicitacaoController.solicitacaoRecebida);
-solicitacaoRoutes.get('/:idDono', authenticateToken, solicitacaoController.solicitacaoFeita);
-solicitacaoRoutes.post('/', authenticateToken, solicitacaoController.createSolicitacao);
-// solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoAceita);
+solicitacaoRoutes.get('/:idLocador', solicitacaoController.solicitacaoRecebida);
+solicitacaoRoutes.get('/:idSolicitacao/:idLocador', solicitacaoController.solicitacaoFeita);
+solicitacaoRoutes.post('/create', solicitacaoController.createSolicitacao);
+solicitacaoRoutes.get('/', solicitacaoController.findAllSolicitacoes);
 // solicitacaoRoutes.post('/:id', authenticateToken, solicitacaoController.solicitacaoRecusada);
 // solicitacaoRoutes.get('/:id/:idLocador', authenticateToken, solicitacaoController.minhaSolicitacao);
 // solicitacaoRoutes.put('/:id', authenticateToken, solicitacaoController);

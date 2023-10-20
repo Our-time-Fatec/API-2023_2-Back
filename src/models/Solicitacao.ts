@@ -4,13 +4,14 @@ import Bicicleta from './Bicicleta';
 import User from './User';
 import DouH from '../enums/Data_ou_Hora';
 import { AllowNull } from 'sequelize-typescript';
+import Locacao from './Locacao';
 
 class Solicitacao extends Model{
     public idSolicitacao!: number;
     public idLocador!: number;
+    public idBicicleta!: number;
     public isRespondido!: boolean;
     public isAceito!: boolean;
-    public bicicletaId!: number;
     public DataouHora!: DouH;
 }
 
@@ -29,6 +30,14 @@ Solicitacao.init(
             },
             allowNull: false,
         },
+        idBicicleta: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Bicicletas',
+                key: 'id',
+            },
+            allowNull: false,
+        },
         isRespondido: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
@@ -36,14 +45,6 @@ Solicitacao.init(
         isAceito: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
-        },
-        bicicletaId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Bicicletas',
-                key: 'id',
-            },
-            allowNull: false,
         },
         DataouHora: {
             type: DataTypes.ENUM(...Object.values(DouH)),  
@@ -54,7 +55,7 @@ Solicitacao.init(
         modelName: 'Solicitacao',
     }
 );
-Solicitacao.belongsTo(Bicicleta, { foreignKey: 'bicicletaId', as: 'bicicleta' });
-Solicitacao.belongsTo(User, {foreignKey: 'idLocador', as: 'id'})
+Solicitacao.belongsTo(Bicicleta, { foreignKey: 'idBicicleta', as: 'bicicleta' });
+Solicitacao.belongsTo(User, {foreignKey: 'idLocador', as: 'locador'})
 
 export default Solicitacao;

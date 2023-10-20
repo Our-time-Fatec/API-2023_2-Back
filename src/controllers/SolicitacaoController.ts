@@ -9,15 +9,14 @@ class SolicitacaoController {
         const {
             DataouHora,
             idLocador,
+            idBicicleta
 
         } = req.body;
         const solicitacao = await Solicitacao.create({
             idLocador,
+            idBicicleta,
             DataouHora,
         });
-        if(!DataouHora || !isValidDate(DataouHora)){
-            return res.status(400).json({error: 'O horario não está valido'})
-        }
         if(!idLocador){
             return res.status(400).json({error: 'O campo de id não é valido'})
         }
@@ -30,13 +29,13 @@ class SolicitacaoController {
 
     async solicitacaoFeita(req: Request, res: Response){
         try{
-            const {donoId} = req.params
+            const { idSolicitacao, idLocador } = req.params;
             const solicitacaoFeita = await Solicitacao.findOne({
-                where:{
-                    donoId,
-                }
+              where: {
+                idSolicitacao,
+                idLocador,
+              },
             });
-
             if(!solicitacaoFeita){
                 return res.status(500).json({error: 'Erro ao buscar a solicitacao enviada'})
             }
@@ -51,7 +50,11 @@ class SolicitacaoController {
     async solicitacaoRecebida(req: Request, res: Response){
         try{
             const {idLocador} = req.params
-            const solicitacaoRecebida = await Solicitacao.findByPk(idLocador);
+            const solicitacaoRecebida = await Solicitacao.findAll({
+                where: {
+                    idLocador,
+                }
+            });
             
             if(!solicitacaoRecebida){
                 return res.status(500).json({error: 'Erro durante a busca das solicitações'})
@@ -64,11 +67,17 @@ class SolicitacaoController {
     }
     }
 
+    async findAllSolicitacoes(req: Request, res: Response){
+        try{
+            const solicitacoes = await Solicitacao.findAll();
+            
+            return res.status(200).json({solicitacoes})
+        }catch (error){
+            console.error('Você não tem solicitações pendentes.', error);
+            return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
+        }
+    }
 
-}
-function isValidDate(dateString:string) {
-    const date = new Date(dateString);
-    return !isNaN(date.getTime());
 }
 
 export default new SolicitacaoController();
