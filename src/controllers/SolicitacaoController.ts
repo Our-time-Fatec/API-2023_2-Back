@@ -78,6 +78,47 @@ class SolicitacaoController {
         }
     }
 
+    async acceptRequest(req: Request, res: Response){
+        try{
+            const{idSolicitacao} = req.params;
+
+            const accept = await Solicitacao.findByPk(idSolicitacao);
+            if(!accept){
+                return res.status(404).json({error: 'Solicitação não encontrada'});
+            }
+
+            accept.isAceito = true;
+            accept.isRespondido = true;
+            
+            await accept.save();
+
+            return res.status(200).json({accept});
+        }catch (error){
+            console.error('Erro ao aceitar a solicitação.', error);
+            return res.status(500).json({error: 'Erro interno do servidor'});
+        }
+    }
+    
+    async rejectRequest(req: Request, res:Response){
+        try {
+          const { idSolicitacao } = req.params;
+
+          const reject = await Solicitacao.findByPk(idSolicitacao);
+          if (!reject) {
+            return res.status(404).json({ error: "Solicitação não encontrada" });
+          }
+
+          reject.isAceito = false;
+          reject.isRespondido = false;
+
+          await reject.save();
+
+          return res.status(200).json({ reject });
+        } catch (error) {
+          console.error("Erro ao recusar a solicitação.", error);
+          return res.status(500).json({ error: "Erro interno do servidor" });
+        }
+    }
 }
 
 export default new SolicitacaoController();
