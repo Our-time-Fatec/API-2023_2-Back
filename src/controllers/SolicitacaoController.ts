@@ -87,6 +87,11 @@ class SolicitacaoController {
                 return res.status(404).json({error: 'Solicitação não encontrada'});
             }
 
+//            if (accept.idLocador !== req.user.id) {
+//                return res.status(403).json({ error: 'Usuário não autorizado!' });
+//            } 
+// teste e erro para Usuario
+
             accept.isAceito = true;
             accept.isRespondido = true;
             
@@ -109,7 +114,7 @@ class SolicitacaoController {
           }
 
           reject.isAceito = false;
-          reject.isRespondido = false;
+          reject.isRespondido = true;
 
           await reject.save();
 
