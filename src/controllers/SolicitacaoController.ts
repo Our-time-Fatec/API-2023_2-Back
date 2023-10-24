@@ -7,12 +7,14 @@ class SolicitacaoController {
     async createSolicitacao(req: Request, res: Response){
         try{
         const {
+            idSolicitacao,
             DataouHora,
             idLocador,
             idBicicleta
 
         } = req.body;
         const solicitacao = await Solicitacao.create({
+            idSolicitacao,
             idLocador,
             idBicicleta,
             DataouHora,
@@ -81,17 +83,18 @@ class SolicitacaoController {
     async acceptRequest(req: Request, res: Response){
         try{
             const{idSolicitacao} = req.params;
+            const userId = req.body.userId
 
             const accept = await Solicitacao.findByPk(idSolicitacao);
             if(!accept){
                 return res.status(404).json({error: 'Solicitação não encontrada'});
             }
 
-//            if (accept.idLocador !== req.user.id) {
-//                return res.status(403).json({ error: 'Usuário não autorizado!' });
-//            } 
-// teste e erro para Usuario
-
+            const bicicleta = await Bicicleta.findByPk(accept.idBicicleta);
+            if (!bicicleta || bicicleta.donoId !== userId) {
+                return res.status(403).json({ error: 'Usuário não autorizado!' });
+            }
+        
             accept.isAceito = true;
             accept.isRespondido = true;
             
@@ -107,11 +110,17 @@ class SolicitacaoController {
     async rejectRequest(req: Request, res:Response){
         try {
           const { idSolicitacao } = req.params;
-
+          const userId = req.body.userId
+          
           const reject = await Solicitacao.findByPk(idSolicitacao);
           if (!reject) {
             return res.status(404).json({ error: "Solicitação não encontrada" });
           }
+
+          const bicicleta = await Bicicleta.findByPk(reject.idBicicleta);
+            if (!bicicleta || bicicleta.donoId !== userId) {
+                return res.status(403).json({ error: 'Usuário não autorizado!' });
+            }
 
           reject.isAceito = false;
           reject.isRespondido = true;

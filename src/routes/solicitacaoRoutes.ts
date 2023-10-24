@@ -8,7 +8,7 @@ solicitacaoRoutes.get('/:idLocador', authenticateToken, solicitacaoController.so
 solicitacaoRoutes.get('/:idSolicitacao/:idLocador', authenticateToken,solicitacaoController.solicitacaoFeita);
 solicitacaoRoutes.post('/create', authenticateToken,solicitacaoController.createSolicitacao);
 solicitacaoRoutes.get('/', authenticateToken,solicitacaoController.findAllSolicitacoes);
-solicitacaoRoutes.put('/:idLocador/aceitar', authenticateToken,solicitacaoController.acceptRequest);
-solicitacaoRoutes.put('/:idLocador/recusar', authenticateToken,solicitacaoController.rejectRequest);
+solicitacaoRoutes.put('/:idSolicitacao/aceitar', authenticateToken,solicitacaoController.acceptRequest);
+solicitacaoRoutes.put('/:idSolicitacao/recusar', authenticateToken,solicitacaoController.rejectRequest);
 
 export default solicitacaoRoutes
