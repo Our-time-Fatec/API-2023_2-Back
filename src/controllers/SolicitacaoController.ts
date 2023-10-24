@@ -29,7 +29,7 @@ class SolicitacaoController {
         }
     }
 
-    async solicitacaoFeita(req: Request, res: Response){
+    async solicitacaoEnviada(req: Request, res: Response){
         try{
             const { idSolicitacao, idLocador } = req.params;
             const solicitacaoFeita = await Solicitacao.findOne({
