@@ -4,22 +4,17 @@ import Bicicleta from '../models/Bicicleta';
 
 class FotoController {
 
-  async createFoto(req: Request, res: Response, fileUrl: string) {
+  async createFoto(req: Request, res: Response) {
     try {
       const { id_bike } = req.body;
 
       const bicicleta = await Bicicleta.findByPk(id_bike);
       if (!bicicleta) {
-        return res.status(404).json({ error: 'Bicicleta não encontrada.' });
+        return res.status(404).json({ error: 'Bicicleta não encontrada' });
       }
-
-      if (!fileUrl) {
-        return res.status(404).json({ error: 'Houve um problema no upload da imagem.' });
-      }
-      const url = fileUrl;
 
       const foto = await Foto.create({
-        url,
+        url: req.file?.filename,
         id_bike,
       });
 
