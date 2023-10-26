@@ -6,23 +6,28 @@ import User from '../models/User';
 class SolicitacaoController {
     async createSolicitacao(req: Request, res: Response){
         try{
+        const userId = req.body.userId;
         const {
             idSolicitacao,
-            DataouHora,
             idLocador,
-            idBicicleta
+            idBicicleta,
+            isRespondido,
+            isAceito,
+            DataouHora
 
         } = req.body;
         const solicitacao = await Solicitacao.create({
             idSolicitacao,
             idLocador,
             idBicicleta,
-            DataouHora,
+            isRespondido,
+            isAceito,
+            DataouHora
         });
         if(!idLocador){
             return res.status(400).json({error: 'O campo de id não é valido'})
         }
-        return res.status(200).json({message:"Solicitação enviada com sucesso"});
+        return res.status(200).json({message:"Solicitação enviada com sucesso", idRequest: solicitacao.idSolicitacao });
         }catch (error){
             console.error('Erro ao enviar a solicitação', error);
             return res.status(500).json({error: 'Erro interno do servidor'});
@@ -73,7 +78,7 @@ class SolicitacaoController {
         try{
             const solicitacoes = await Solicitacao.findAll();
             
-            return res.status(200).json({solicitacoes})
+            return res.status(200).json(solicitacoes)
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
