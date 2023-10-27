@@ -4,6 +4,8 @@ import Bicicleta from './Bicicleta';
 
 class User extends Model {
   public id!: number;
+  public googleID!: string;
+  public imageUser!: string;
   public email!: string;
   public username!: string;
   public password!: string;
@@ -22,6 +24,14 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    googleID: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    imageUser: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -43,10 +53,10 @@ User.init(
       type: DataTypes.STRING,
     },
     longitude: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
     },
     latitude: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
     },
     isAlugando: {
       type: DataTypes.BOOLEAN,
@@ -66,6 +76,6 @@ User.init(
 );
 
 User.hasMany(Bicicleta, { foreignKey: 'donoId', as: 'bicicletas' });
-Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono'})
+Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono' })
 
 export default User;
