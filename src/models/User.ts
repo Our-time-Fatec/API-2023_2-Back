@@ -10,7 +10,12 @@ class User extends Model {
   public username!: string;
   public password!: string;
   public telefone!: string;
-  public endereco!: string;
+  public cep!: string;
+  public estado!: string;
+  public cidade!: string;
+  public bairro!: string;
+  public logradouro!: string;
+  public numero_casa!: number;
   public longitude!: number;
   public latitude!: number;
   public isAlugando!: boolean;
@@ -49,8 +54,23 @@ User.init(
     telefone: {
       type: DataTypes.STRING,
     },
-    endereco: {
+    cep: {
+      type: DataTypes.STRING
+    },
+    estado: {
+      type: DataTypes.STRING
+    },
+    cidade: {
+      type: DataTypes.STRING
+    },
+    bairro: {
+      type: DataTypes.STRING
+    },
+    logradouro: {
       type: DataTypes.STRING,
+    },
+    numero_casa: {
+      type: DataTypes.NUMBER
     },
     longitude: {
       type: DataTypes.DOUBLE,

@@ -24,9 +24,9 @@ class UserController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      const { username, email, password, telefone, endereco } = req.body;
+      const { username, email, password, telefone, cep, estado, cidade, bairro, logradouro, numero_casa } = req.body;
 
-      if (!username || !email || !password || !telefone || !endereco) {
+      if (!username || !email || !password || !telefone || !cep || !estado || !cidade || !bairro || !logradouro || !numero_casa) {
         return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
       }
 
@@ -43,7 +43,12 @@ class UserController {
         email,
         password: hashedPassword,
         telefone,
-        endereco
+        cep,
+        estado,
+        bairro,
+        cidade,
+        logradouro,
+        numero_casa
       });
 
       res.status(201).json({ message: 'Usuario cadastrado com sucesso.' });
@@ -154,8 +159,12 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { username, email, password, telefone, endereco } = req.body;
+      const { username, email, telefone, cep, estado, cidade, bairro, logradouro, numero_casa } = req.body;
       const userId = req.body.userId;
+
+      if (!username || !email || !telefone || !cep || !estado || !cidade || !bairro || !logradouro || !numero_casa) {
+        return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+      }
 
       const user = await User.findByPk(id);
 
@@ -178,17 +187,19 @@ class UserController {
         }
       }
 
-      if (username) {
-        user.username = username;
-      }
-      if (telefone) {
-        user.telefone = telefone;
-      }
-      if (endereco) {
-        user.endereco = endereco;
+      const updateUserInfo = {
+        username,
+        email,
+        telefone,
+        cep,
+        estado,
+        cidade,
+        bairro,
+        logradouro,
+        numero_casa
       }
 
-      await user.save();
+      await user.update(updateUserInfo);
 
       return res.status(200).json({ message: 'Usuario Editado com sucesso.' });
     } catch (error) {
