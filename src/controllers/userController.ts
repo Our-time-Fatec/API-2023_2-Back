@@ -96,10 +96,9 @@ class UserController {
         imageUser: picture,
         username: name,
         email,
-        password: password
+        password
       });
 
-      console.log(newUser)
       const token = jwt.sign({ userId: newUser.id }, 'chave_secreta', { expiresIn: '1h' });
       return res.status(200).json({ message: 'Autenticação bem-sucedida', username: newUser.username, imageUser: newUser.imageUser, token });
     }

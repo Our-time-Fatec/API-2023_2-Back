@@ -70,7 +70,7 @@ User.init(
       type: DataTypes.STRING,
     },
     numero_casa: {
-      type: DataTypes.NUMBER
+      type: DataTypes.INTEGER
     },
     longitude: {
       type: DataTypes.DOUBLE,
