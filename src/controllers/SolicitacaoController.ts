@@ -47,7 +47,7 @@ class SolicitacaoController {
                 return res.status(500).json({error: 'Erro ao buscar a solicitacao enviada'})
             }
         
-            return res.status(200).json({solicitacaoFeita});
+            return res.status(200).json(solicitacaoFeita);
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
@@ -66,7 +66,7 @@ class SolicitacaoController {
             if(!solicitacaoRecebida){
                 return res.status(500).json({error: 'Erro durante a busca das solicitações'})
             }
-            return res.status(200).json({solicitacaoRecebida});
+            return res.status(200).json(solicitacaoRecebida);
         }catch (error){
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({error: 'Erro interno do servidor ao enviar a solicitação'});
