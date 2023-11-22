@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import Locacao from '../models/Locacao';
 import User from '../models/User';
 import Bicicleta from '../models/Bicicleta';
+import { where } from 'sequelize';
+import Marca from '../models/Marca';
+import Modalidade from '../models/Modalidade';
 
 class LocacaoController {
 
@@ -130,6 +133,99 @@ class LocacaoController {
     } catch (error) {
       console.error('Erro ao excluir uma locação:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
+  }
+
+  async LocacoesAlugadasById(req: Request, res: Response) {
+    try {
+      const { idLocatario } = req.params;
+
+      const locacoes = await Locacao.findAll({
+        where: {
+          locatarioId: idLocatario,
+        },
+        include: [
+          {
+            model: Bicicleta, as: 'bicicleta', include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              {
+                model: User,
+                as: 'dono',
+                attributes: {
+                  exclude: ['password'],
+                },
+              },
+            ],
+          },
+          {
+            model: User, as: 'locatario',
+            attributes: {
+              exclude: ['password'],
+            },
+          }
+        ]
+      });
+
+      if (!locacoes) {
+        return res.status(404).json({ error: 'Locações não encontradas' });
+      }
+
+      return res.status(200).json(locacoes);
+    } catch (error) {
+      console.error('Erro ao buscar uma locação:', error);
+      return res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
+  }
+
+  async LocacoesLocadasById(req: Request, res: Response) {
+    try {
+      const { idLocador } = req.params
+
+      const bicicletasDoLocador = await Bicicleta.findAll({
+        where: {
+          donoId: idLocador,
+        },
+        attributes: ['id'],
+      });
+
+      const idBicicletas = bicicletasDoLocador.map((bicicleta) => bicicleta.id);
+
+      const LocacoesLocadas = await Locacao.findAll({
+        where: {
+          bicicletaId: idBicicletas,
+        },
+        include: [
+          {
+            model: Bicicleta, as: 'bicicleta', include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              {
+                model: User,
+                as: 'dono',
+                attributes: {
+                  exclude: ['password'],
+                },
+              },
+            ],
+          },
+          {
+            model: User, as: 'locatario',
+            attributes: {
+              exclude: ['password'],
+            },
+          }
+        ],
+      });
+
+      if (!LocacoesLocadas) {
+        return res.status(500).json({ error: 'Locações não encontradas' })
+      }
+      return res.status(200).json(LocacoesLocadas);
+    } catch (error) {
+      console.error('Erro ao buscar uma locação:', error);
+      return res.status(500).json({ error: 'Erro interno do servidor ao enviar a solicitação' });
+
     }
   }
 }
