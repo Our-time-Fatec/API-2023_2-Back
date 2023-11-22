@@ -1,7 +1,43 @@
 import { Request, Response } from 'express';
 import Locacao from '../models/Locacao';
+import User from '../models/User';
+import Bicicleta from '../models/Bicicleta';
 
 class LocacaoController {
+
+
+  async createLocacaoFromSolicitacao(locatarioId: number, bicicletaId: number, bicicletaDonoId: number) {
+    try {
+
+      const locacao = await Locacao.create({
+        locatarioId,
+        bicicletaId,
+        bicicletaDonoId,
+      });
+
+      const locatario = await User.findByPk(locatarioId);
+      const bicicleta = await Bicicleta.findByPk(bicicletaId);
+
+      if (locatario) {
+        const updateLocatario = {
+          isAlugando: true
+        }
+        locatario.update(updateLocatario);
+      }
+
+      if (bicicleta) {
+        const updateBicicleta = {
+          isAlugada: true
+        }
+        bicicleta.update(updateBicicleta);
+      }
+
+      return locacao.id
+    } catch (error) {
+      console.error('Erro ao criar uma locação:', error);
+      return "Erro ao criar locação"
+    }
+  }
 
   async createLocacao(req: Request, res: Response) {
     try {

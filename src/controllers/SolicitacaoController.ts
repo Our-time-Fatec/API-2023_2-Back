@@ -4,6 +4,7 @@ import Bicicleta from '../models/Bicicleta';
 import User from '../models/User';
 import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
+import locacaoController from './locacao.Controller';
 
 class SolicitacaoController {
     async createSolicitacao(req: Request, res: Response) {
@@ -151,6 +152,8 @@ class SolicitacaoController {
         }
     }
 
+
+
     async acceptRequest(req: Request, res: Response) {
         try {
             const { idSolicitacao } = req.params;
@@ -170,8 +173,9 @@ class SolicitacaoController {
             accept.isRespondido = true;
 
             await accept.save();
+            const locacaoId = locacaoController.createLocacaoFromSolicitacao(accept.idLocatario, bicicleta.id, bicicleta.donoId);
 
-            return res.status(200).json({ message: "Solicitação aceita com sucesso!" });
+            return res.status(200).json({ message: `Solicitação aceita com sucesso! Locação Id ${locacaoId} gerada!` });
         } catch (error) {
             console.error('Erro ao aceitar a solicitação.', error);
             return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -204,6 +208,8 @@ class SolicitacaoController {
             return res.status(500).json({ error: "Erro interno do servidor" });
         }
     }
+
+
 }
 
 export default new SolicitacaoController();

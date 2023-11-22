@@ -8,7 +8,7 @@ import Locacao from './Locacao';
 
 class Solicitacao extends Model {
     public idSolicitacao!: number;
-    public idLocador!: number;
+    public idLocatario!: number;
     public idBicicleta!: number;
     public isRespondido!: boolean;
     public isAceito!: boolean;
