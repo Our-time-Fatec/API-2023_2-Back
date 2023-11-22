@@ -5,17 +5,32 @@ import Bicicleta from '../models/Bicicleta';
 import { where } from 'sequelize';
 import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
+import DouH from '../enums/DiaouHora';
+
+function calcularDiferencaEmDias(dataInicio: Date, dataFim: Date): number {
+  const umDiaEmMilissegundos = 24 * 60 * 60 * 1000;
+  const diferencaEmMilissegundos = Math.abs(dataFim.getTime() - dataInicio.getTime());
+  const diferencaEmDias = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
+  return diferencaEmDias;
+}
+
+function calcularDiferencaEmHoras(dataInicio: Date, dataFim: Date): number {
+  const umHoraEmMilissegundos = 60 * 60 * 1000;
+  const diferencaEmMilissegundos = Math.abs(dataFim.getTime() - dataInicio.getTime());
+  const diferencaEmHoras = diferencaEmMilissegundos / umHoraEmMilissegundos;
+  return Math.ceil(diferencaEmHoras);
+}
 
 class LocacaoController {
 
-
-  async createLocacaoFromSolicitacao(locatarioId: number, bicicletaId: number, bicicletaDonoId: number) {
+  async createLocacaoFromSolicitacao(locatarioId: number, bicicletaId: number, bicicletaDonoId: number, DiaouHora: DouH) {
     try {
 
       const locacao = await Locacao.create({
         locatarioId,
         bicicletaId,
         bicicletaDonoId,
+        DiaouHora
       });
 
       const locatario = await User.findByPk(locatarioId);
@@ -226,6 +241,47 @@ class LocacaoController {
       console.error('Erro ao buscar uma locação:', error);
       return res.status(500).json({ error: 'Erro interno do servidor ao enviar a solicitação' });
 
+    }
+  }
+
+  async encerrarLocacao(req: Request, res: Response) {
+    try {
+      const { idLocacao } = req.params;
+      const userId = req.body.userId
+
+      const locacao = await Locacao.findByPk(idLocacao);
+
+      if (!locacao) {
+        return res.status(404).json({ error: 'Locação não encontrada' });
+      }
+
+      const bicicleta = await Bicicleta.findByPk(locacao.bicicletaId);
+
+      if (!bicicleta) {
+        return res.status(403).json({ error: 'Bicicleta nao existe!' });
+      }
+
+      if (locacao.locatarioId !== userId) {
+        return res.status(403).json({ error: 'Usuário não autorizado!' });
+      }
+
+      // locacao.isBikeDevolvida = true;
+      const dataAtual = new Date();
+
+      if (locacao.DiaouHora == DouH.Dia) {
+        const diferencaEmDias = calcularDiferencaEmDias(locacao.createdAt, dataAtual);
+        locacao.valorTotal = bicicleta.valorDia * diferencaEmDias;
+      }
+      else if (locacao.DiaouHora == DouH.Hora) {
+        const diferencaEmHoras = calcularDiferencaEmHoras(locacao.createdAt, dataAtual);
+        locacao.valorTotal = bicicleta.valorHora * diferencaEmHoras;
+      }
+
+
+      return res.status(200).json(locacao);
+    } catch (error) {
+      console.error('Erro ao aceitar a solicitação.', error);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
 }

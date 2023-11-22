@@ -179,7 +179,7 @@ class SolicitacaoController {
             accept.isRespondido = true;
 
             await accept.save();
-            const locacaoid = await locacaoController.createLocacaoFromSolicitacao(accept.idLocatario, bicicleta.id, bicicleta.donoId);
+            const locacaoid = await locacaoController.createLocacaoFromSolicitacao(accept.idLocatario, bicicleta.id, bicicleta.donoId, accept.DiaouHora);
             return res.status(200).json({ message: `Solicitação aceita com sucesso! Locação Id ${locacaoid} gerada!` });
         } catch (error) {
             console.error('Erro ao aceitar a solicitação.', error);

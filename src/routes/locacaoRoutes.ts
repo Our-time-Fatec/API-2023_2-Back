@@ -11,6 +11,7 @@ locacaoRoutes.put('/:id', authenticateToken, locacaoController.updateLocacao);
 locacaoRoutes.delete('/:id', authenticateToken, locacaoController.deleteLocacao);
 locacaoRoutes.get('/Alugadas/:idLocatario', authenticateToken, locacaoController.LocacoesAlugadasById);
 locacaoRoutes.get('/Locadas/:idLocador', authenticateToken, locacaoController.LocacoesLocadasById);
+locacaoRoutes.put('/Encerrar/:idLocacao', authenticateToken, locacaoController.encerrarLocacao);
 
 
 export default locacaoRoutes;

@@ -12,7 +12,7 @@ class Solicitacao extends Model {
     public idBicicleta!: number;
     public isRespondido!: boolean;
     public isAceito!: boolean;
-    public DataouHora!: DouH;
+    public DiaouHora!: DouH;
 }
 
 Solicitacao.init(
