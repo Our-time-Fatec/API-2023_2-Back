@@ -16,6 +16,19 @@ class SolicitacaoController {
                 DataouHora
 
             } = req.body;
+
+            const Solicitacoes = await Solicitacao.findAll({
+                where: {
+                    idLocatario,
+                    idBicicleta,
+                    isRespondido: false
+                },
+            });
+
+            if (Solicitacoes) {
+                return res.status(400).json({ error: 'Você já tem uma solicitação em aberto para esta bicicleta' })
+            }
+
             const solicitacao = await Solicitacao.create({
                 idSolicitacao,
                 idLocatario,
