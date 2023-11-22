@@ -20,6 +20,12 @@ class SolicitacaoController {
 
             } = req.body;
 
+            const locatario = await User.findByPk(idLocatario);
+
+            if (locatario?.isAlugando) {
+                return res.status(400).json({ error: 'Você já esta alugando uma bicicleta.' })
+            }
+
             const Solicitacoes = await Solicitacao.findAll({
                 where: {
                     idLocatario,
@@ -29,7 +35,7 @@ class SolicitacaoController {
             });
 
             if (Solicitacoes.length > 0) {
-                return res.status(400).json({ error: 'Você já tem uma solicitação em aberto para esta bicicleta' })
+                return res.status(400).json({ error: 'Você já tem uma solicitação em aberto para esta bicicleta.' })
             }
 
             const solicitacao = await Solicitacao.create({
