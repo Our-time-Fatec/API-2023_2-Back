@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import Solicitacao from '../models/Solicitacao';
 import Bicicleta from '../models/Bicicleta';
 import User from '../models/User';
+import Marca from '../models/Marca';
+import Modalidade from '../models/Modalidade';
 
 class SolicitacaoController {
     async createSolicitacao(req: Request, res: Response) {
@@ -54,6 +56,27 @@ class SolicitacaoController {
                 where: {
                     idLocatario,
                 },
+                include: [
+                    {
+                        model: Bicicleta, as: 'bicicleta', include: [
+                            { model: Marca, as: 'marca' },
+                            { model: Modalidade, as: 'modalidade' },
+                            {
+                                model: User,
+                                as: 'dono',
+                                attributes: {
+                                    exclude: ['password'],
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        model: User, as: 'locatario',
+                        attributes: {
+                            exclude: ['password'],
+                        },
+                    }
+                ],
             });
             if (!Solicitacoes) {
                 return res.status(500).json({ error: 'Erro ao buscar a solicitacões enviadas.' })
@@ -83,6 +106,27 @@ class SolicitacaoController {
                 where: {
                     idBicicleta: idBicicletas,
                 },
+                include: [
+                    {
+                        model: Bicicleta, as: 'bicicleta', include: [
+                            { model: Marca, as: 'marca' },
+                            { model: Modalidade, as: 'modalidade' },
+                            {
+                                model: User,
+                                as: 'dono',
+                                attributes: {
+                                    exclude: ['password'],
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        model: User, as: 'locatario',
+                        attributes: {
+                            exclude: ['password'],
+                        },
+                    }
+                ],
             });
 
             if (!solicitacaoRecebida) {
