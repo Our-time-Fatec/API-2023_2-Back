@@ -9,7 +9,7 @@ class SolicitacaoController {
             const userId = req.body.userId;
             const {
                 idSolicitacao,
-                idLocador,
+                idLocatario,
                 idBicicleta,
                 isRespondido,
                 isAceito,
@@ -18,13 +18,13 @@ class SolicitacaoController {
             } = req.body;
             const solicitacao = await Solicitacao.create({
                 idSolicitacao,
-                idLocador,
+                idLocatario,
                 idBicicleta,
                 isRespondido,
                 isAceito,
                 DataouHora
             });
-            if (!idLocador) {
+            if (!idLocatario) {
                 return res.status(400).json({ error: 'O campo de id não é valido' })
             }
             return res.status(200).json({ message: "Solicitação enviada com sucesso", idRequest: solicitacao.idSolicitacao });
@@ -36,11 +36,11 @@ class SolicitacaoController {
 
     async solicitacaoEnviada(req: Request, res: Response) {
         try {
-            const { idSolicitacao, idLocador } = req.params;
+            const { idSolicitacao, idLocatario } = req.params;
             const solicitacaoFeita = await Solicitacao.findOne({
                 where: {
                     idSolicitacao,
-                    idLocador,
+                    idLocatario,
                 },
             });
             if (!solicitacaoFeita) {

@@ -6,7 +6,7 @@ import DouH from '../enums/Data_ou_Hora';
 import { AllowNull } from 'sequelize-typescript';
 import Locacao from './Locacao';
 
-class Solicitacao extends Model{
+class Solicitacao extends Model {
     public idSolicitacao!: number;
     public idLocador!: number;
     public idBicicleta!: number;
@@ -22,9 +22,9 @@ Solicitacao.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        idLocador: {
+        idLocatario: {
             type: DataTypes.INTEGER,
-            references:{
+            references: {
                 model: 'Users',
                 key: 'id',
             },
@@ -47,7 +47,7 @@ Solicitacao.init(
             defaultValue: false,
         },
         DataouHora: {
-            type: DataTypes.ENUM(...Object.values(DouH)),  
+            type: DataTypes.ENUM(...Object.values(DouH)),
         },
     },
     {
@@ -56,6 +56,6 @@ Solicitacao.init(
     }
 );
 Solicitacao.belongsTo(Bicicleta, { foreignKey: 'idBicicleta', as: 'bicicleta' });
-Solicitacao.belongsTo(User, {foreignKey: 'idLocador', as: 'locador'})
+Solicitacao.belongsTo(User, { foreignKey: 'idLocatario', as: 'locatario' })
 
 export default Solicitacao;
