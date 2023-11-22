@@ -2,7 +2,7 @@ import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequel
 import sequelize from '../config/database';
 import Bicicleta from './Bicicleta';
 import User from './User';
-import DouH from '../enums/Data_ou_Hora';
+import DouH from '../enums/DiaouHora';
 import { AllowNull } from 'sequelize-typescript';
 import Locacao from './Locacao';
 
@@ -46,7 +46,7 @@ Solicitacao.init(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-        DataouHora: {
+        DiaouHora: {
             type: DataTypes.ENUM(...Object.values(DouH)),
         },
     },

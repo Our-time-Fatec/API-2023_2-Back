@@ -13,7 +13,7 @@ class SolicitacaoController {
                 idBicicleta,
                 isRespondido,
                 isAceito,
-                DataouHora
+                DiaouHora
 
             } = req.body;
 
@@ -25,7 +25,7 @@ class SolicitacaoController {
                 },
             });
 
-            if (Solicitacoes) {
+            if (Solicitacoes.length > 0) {
                 return res.status(400).json({ error: 'Você já tem uma solicitação em aberto para esta bicicleta' })
             }
 
@@ -35,7 +35,7 @@ class SolicitacaoController {
                 idBicicleta,
                 isRespondido,
                 isAceito,
-                DataouHora
+                DiaouHora
             });
             if (!idLocatario) {
                 return res.status(400).json({ error: 'O campo de id não é valido' })
