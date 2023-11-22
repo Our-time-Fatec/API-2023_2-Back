@@ -171,7 +171,7 @@ class SolicitacaoController {
 
             await accept.save();
 
-            return res.status(200).json({ accept });
+            return res.status(200).json({ message: "Solicitação aceita com sucesso!" });
         } catch (error) {
             console.error('Erro ao aceitar a solicitação.', error);
             return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -198,7 +198,7 @@ class SolicitacaoController {
 
             await reject.save();
 
-            return res.status(200).json({ reject });
+            return res.status(200).json({ message: "Solicitação recusada com sucesso!" });
         } catch (error) {
             console.error("Erro ao recusar a solicitação.", error);
             return res.status(500).json({ error: "Erro interno do servidor" });

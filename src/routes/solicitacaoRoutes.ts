@@ -10,6 +10,6 @@ solicitacaoRoutes.get('/:idSolicitacao/:idLocador', authenticateToken, solicitac
 solicitacaoRoutes.post('/create', authenticateToken, solicitacaoController.createSolicitacao);
 solicitacaoRoutes.get('/', solicitacaoController.findAllSolicitacoes);
 solicitacaoRoutes.put('/:idSolicitacao/aceitar', authenticateToken, solicitacaoController.acceptRequest);
-solicitacaoRoutes.put('/:idSolicitacao/recusar', authenticateToken, solicitacaoController.rejectRequest);
+solicitacaoRoutes.put('/:idSolicitacao/rejeitar', authenticateToken, solicitacaoController.rejectRequest);
 
 export default solicitacaoRoutes
