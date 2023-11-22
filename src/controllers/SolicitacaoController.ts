@@ -173,9 +173,8 @@ class SolicitacaoController {
             accept.isRespondido = true;
 
             await accept.save();
-            const locacaoId = locacaoController.createLocacaoFromSolicitacao(accept.idLocatario, bicicleta.id, bicicleta.donoId);
-
-            return res.status(200).json({ message: `Solicitação aceita com sucesso! Locação Id ${locacaoId} gerada!` });
+            const locacaoid = await locacaoController.createLocacaoFromSolicitacao(accept.idLocatario, bicicleta.id, bicicleta.donoId);
+            return res.status(200).json({ message: `Solicitação aceita com sucesso! Locação Id ${locacaoid} gerada!` });
         } catch (error) {
             console.error('Erro ao aceitar a solicitação.', error);
             return res.status(500).json({ error: 'Erro interno do servidor' });
