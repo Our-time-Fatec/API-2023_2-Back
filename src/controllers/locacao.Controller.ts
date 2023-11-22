@@ -247,6 +247,7 @@ class LocacaoController {
   async encerrarLocacao(req: Request, res: Response) {
     try {
       const { idLocacao } = req.params;
+      const { avaliacao } = req.body;
       const userId = req.body.userId
 
       const locacao = await Locacao.findByPk(idLocacao);
@@ -265,7 +266,10 @@ class LocacaoController {
         return res.status(403).json({ error: 'Usuário não autorizado!' });
       }
 
-      // locacao.isBikeDevolvida = true;
+      locacao.isBikeDevolvida = true;
+      locacao.avaliacaoDono = avaliacao;
+      bicicleta.isAlugada = false;
+
       const dataAtual = new Date();
 
       if (locacao.DiaouHora == DouH.Dia) {
@@ -277,8 +281,11 @@ class LocacaoController {
         locacao.valorTotal = bicicleta.valorHora * diferencaEmHoras;
       }
 
+      await locacao.save();
+      await bicicleta.save();
 
-      return res.status(200).json(locacao);
+      return res.status(200).json({ message: "Locação foi encerrada com sucesso!" });
+
     } catch (error) {
       console.error('Erro ao aceitar a solicitação.', error);
       return res.status(500).json({ error: 'Erro interno do servidor' });
