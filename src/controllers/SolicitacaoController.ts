@@ -34,27 +34,26 @@ class SolicitacaoController {
         }
     }
 
-    async solicitacaoEnviada(req: Request, res: Response) {
+    async solicitacoesEnviadas(req: Request, res: Response) {
         try {
-            const { idSolicitacao, idLocatario } = req.params;
-            const solicitacaoFeita = await Solicitacao.findOne({
+            const { idLocatario } = req.params;
+            const Solicitacoes = await Solicitacao.findAll({
                 where: {
-                    idSolicitacao,
                     idLocatario,
                 },
             });
-            if (!solicitacaoFeita) {
-                return res.status(500).json({ error: 'Erro ao buscar a solicitacao enviada' })
+            if (!Solicitacoes) {
+                return res.status(500).json({ error: 'Erro ao buscar a solicitacões enviadas.' })
             }
 
-            return res.status(200).json({ solicitacaoFeita });
+            return res.status(200).json(Solicitacoes);
         } catch (error) {
             console.error('Você não tem solicitações pendentes.', error);
             return res.status(500).json({ error: 'Erro interno do servidor ao enviar a solicitação' });
         }
     }
 
-    async solicitacaoRecebida(req: Request, res: Response) {
+    async solicitacoesRecebidas(req: Request, res: Response) {
         try {
             const { idLocador } = req.params
 
@@ -62,7 +61,7 @@ class SolicitacaoController {
                 where: {
                     donoId: idLocador,
                 },
-                attributes: ['id'], // Selecione apenas os IDs das bicicletas
+                attributes: ['id'],
             });
 
             const idBicicletas = bicicletasDoLocador.map((bicicleta) => bicicleta.id);
