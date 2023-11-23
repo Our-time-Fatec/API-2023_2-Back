@@ -34,10 +34,12 @@ class avaliacaoController {
         }
 
         
-        const locadorAvaliacoes = locacoesLocador.map((locacao) => locacao.avaliacaoDono);
+       // Calculate average rating for locador
+        const locadorAvaliacoes = locacoesLocador.map((locacao) => parseFloat(locacao.avaliacaoDono)).filter((avaliacao) => !isNaN(avaliacao));
         const locadorMediaAvaliacoes = locadorAvaliacoes.length > 0 ? locadorAvaliacoes.reduce((a, b) => a + b) / locadorAvaliacoes.length : 0;
 
-        const bikeAvaliacoes = locacoesBike.map((locacao) => locacao.avaliacaoDono);
+        // Calculate average rating for bike
+        const bikeAvaliacoes = locacoesBike.map((locacao) => parseFloat(locacao.avaliacaoDono)).filter((avaliacao) => !isNaN(avaliacao));
         const bikeMediaAvaliacoes = bikeAvaliacoes.length > 0 ? bikeAvaliacoes.reduce((a, b) => a + b) / bikeAvaliacoes.length : 0;
 
         locador.avaliacao = locadorMediaAvaliacoes;

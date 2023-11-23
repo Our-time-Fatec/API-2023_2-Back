@@ -298,8 +298,8 @@ class LocacaoController {
         locacao.valorTotal = bicicleta.valorHora * diferencaEmHoras;
       }
 
-      // await locacao.save();
-      // await bicicleta.save();
+      await locacao.save();
+      await bicicleta.save();
 
       const teste = await avaliacaoController.updateAvaliacoes(locacao.bicicleta.donoId, locacao.bicicletaId)
 

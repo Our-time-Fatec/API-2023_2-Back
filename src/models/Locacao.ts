@@ -6,7 +6,7 @@ import DouH from '../enums/DiaouHora';
 
 class Locacao extends Model {
   public id!: number;
-  public avaliacaoDono!: number;
+  public avaliacaoDono!: string;
   public avaliacaoLocatario!: number | null;
   public locatarioId!: number;
   public bicicletaId!: number;
