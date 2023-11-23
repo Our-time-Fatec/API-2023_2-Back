@@ -6,6 +6,7 @@ import { where } from 'sequelize';
 import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
 import DouH from '../enums/DiaouHora';
+import avaliacaoController from './avaliacaoController';
 
 function calcularDiferencaEmDias(dataInicio: Date, dataFim: Date): number {
   const umDiaEmMilissegundos = 24 * 60 * 60 * 1000;
@@ -250,7 +251,23 @@ class LocacaoController {
       const { avaliacaoDono } = req.body;
       const userId = req.body.userId
 
-      const locacao = await Locacao.findByPk(idLocacao);
+      const locacao = await Locacao.findByPk(idLocacao, {
+        include: [
+          {
+              model: Bicicleta, as: 'bicicleta', include: [
+                  { model: Marca, as: 'marca' },
+                  { model: Modalidade, as: 'modalidade' },
+                  {
+                      model: User,
+                      as: 'dono',
+                      attributes: {
+                          exclude: ['password'],
+                      },
+                  },
+              ],
+          },
+      ],
+      });
 
       if (!locacao) {
         return res.status(404).json({ error: 'Locação não encontrada' });
@@ -281,13 +298,15 @@ class LocacaoController {
         locacao.valorTotal = bicicleta.valorHora * diferencaEmHoras;
       }
 
-      await locacao.save();
-      await bicicleta.save();
+      // await locacao.save();
+      // await bicicleta.save();
 
-      return res.status(200).json({ message: "Locação foi encerrada com sucesso!" });
+      const teste = await avaliacaoController.updateAvaliacoes(locacao.bicicleta.donoId, locacao.bicicletaId)
+
+      return res.status(200).json(teste);
 
     } catch (error) {
-      console.error('Erro ao aceitar a solicitação.', error);
+      console.error('Erro ao encerrar locação!.', error);
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
@@ -339,7 +358,7 @@ class LocacaoController {
       return res.status(200).json({ message: "Locação foi encerrada com sucesso!" });
 
     } catch (error) {
-      console.error('Erro ao aceitar a solicitação.', error);
+      console.error('Erro ao confirmar pagamento de locação.', error);
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }

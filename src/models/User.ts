@@ -19,8 +19,7 @@ class User extends Model {
   public longitude!: number;
   public latitude!: number;
   public isAlugando!: boolean;
-  public avaliacaoBikes!: number;
-  public avaliacaoLocacoes!: number;
+  public avaliacao!: number;
   public getBicicletas!: HasManyGetAssociationsMixin<Bicicleta>;
 }
 User.init(
@@ -82,12 +81,9 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    avaliacaoBikes: {
-      type: DataTypes.SMALLINT,
-    },
-    avaliacaoLocacoes: {
-      type: DataTypes.SMALLINT,
-    },
+    avaliacao: {
+      type: DataTypes.DECIMAL(3, 1),
+    }
   },
   {
     sequelize,
