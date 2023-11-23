@@ -6,6 +6,7 @@ const userRoutes = Router();
 
 userRoutes.post('/register', userController.registerUser);
 userRoutes.post('/login', userController.loginUser);
+userRoutes.post('/authGoogle', userController.authUserGoogle);
 userRoutes.get('/', userController.findAllUsers);
 userRoutes.get('/:id', userController.findUserById);
 userRoutes.put('/:id', authenticateToken, userController.updateUser);

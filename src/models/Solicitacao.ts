@@ -2,17 +2,17 @@ import { DataTypes, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequel
 import sequelize from '../config/database';
 import Bicicleta from './Bicicleta';
 import User from './User';
-import DouH from '../enums/Data_ou_Hora';
+import DouH from '../enums/DiaouHora';
 import { AllowNull } from 'sequelize-typescript';
 import Locacao from './Locacao';
 
-class Solicitacao extends Model{
+class Solicitacao extends Model {
     public idSolicitacao!: number;
-    public idLocador!: number;
+    public idLocatario!: number;
     public idBicicleta!: number;
     public isRespondido!: boolean;
     public isAceito!: boolean;
-    public DataouHora!: DouH;
+    public DiaouHora!: DouH;
 }
 
 Solicitacao.init(
@@ -22,9 +22,9 @@ Solicitacao.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        idLocador: {
+        idLocatario: {
             type: DataTypes.INTEGER,
-            references:{
+            references: {
                 model: 'Users',
                 key: 'id',
             },
@@ -46,8 +46,8 @@ Solicitacao.init(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-        DataouHora: {
-            type: DataTypes.ENUM(...Object.values(DouH)),  
+        DiaouHora: {
+            type: DataTypes.ENUM(...Object.values(DouH)),
         },
     },
     {
@@ -56,6 +56,6 @@ Solicitacao.init(
     }
 );
 Solicitacao.belongsTo(Bicicleta, { foreignKey: 'idBicicleta', as: 'bicicleta' });
-Solicitacao.belongsTo(User, {foreignKey: 'idLocador', as: 'locador'})
+Solicitacao.belongsTo(User, { foreignKey: 'idLocatario', as: 'locatario' })
 
 export default Solicitacao;

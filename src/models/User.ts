@@ -4,16 +4,22 @@ import Bicicleta from './Bicicleta';
 
 class User extends Model {
   public id!: number;
+  public googleID!: string;
+  public imageUser!: string;
   public email!: string;
   public username!: string;
   public password!: string;
   public telefone!: string;
-  public endereco!: string;
+  public cep!: string;
+  public estado!: string;
+  public cidade!: string;
+  public bairro!: string;
+  public logradouro!: string;
+  public numero_casa!: number;
   public longitude!: number;
   public latitude!: number;
   public isAlugando!: boolean;
-  public avaliacaoBikes!: number;
-  public avaliacaoLocacoes!: number;
+  public avaliacao!: number;
   public getBicicletas!: HasManyGetAssociationsMixin<Bicicleta>;
 }
 User.init(
@@ -22,6 +28,14 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    googleID: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    imageUser: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -39,25 +53,37 @@ User.init(
     telefone: {
       type: DataTypes.STRING,
     },
-    endereco: {
+    cep: {
+      type: DataTypes.STRING
+    },
+    estado: {
+      type: DataTypes.STRING
+    },
+    cidade: {
+      type: DataTypes.STRING
+    },
+    bairro: {
+      type: DataTypes.STRING
+    },
+    logradouro: {
       type: DataTypes.STRING,
     },
+    numero_casa: {
+      type: DataTypes.INTEGER
+    },
     longitude: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
     },
     latitude: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
     },
     isAlugando: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    avaliacaoBikes: {
-      type: DataTypes.SMALLINT,
-    },
-    avaliacaoLocacoes: {
-      type: DataTypes.SMALLINT,
-    },
+    avaliacao: {
+      type: DataTypes.DECIMAL(3, 1),
+    }
   },
   {
     sequelize,
@@ -66,6 +92,6 @@ User.init(
 );
 
 User.hasMany(Bicicleta, { foreignKey: 'donoId', as: 'bicicletas' });
-Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono'})
+Bicicleta.belongsTo(User, { foreignKey: 'donoId', as: 'dono' })
 
 export default User;

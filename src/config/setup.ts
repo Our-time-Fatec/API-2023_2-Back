@@ -11,7 +11,7 @@ export default async function setupDatabase() {
                 console.error('Erro ao sincronizar o banco de dados:', error);
             });
 
-        await seeds();
+        //await seeds();
     } catch (error) {
         console.error('Erro ao sincronizar o banco de dados ou inserir valores predefinidos:', error);
     }

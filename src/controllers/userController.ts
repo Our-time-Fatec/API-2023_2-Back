@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
 import Bicicleta from '../models/Bicicleta';
@@ -7,13 +8,25 @@ import Marca from '../models/Marca';
 import Modalidade from '../models/Modalidade';
 import Foto from '../models/Foto';
 
+function generateRandomPassword(length: number): string {
+  if (length <= 0) {
+    throw new Error('O comprimento da senha deve ser maior que zero.');
+  }
+
+  const buffer = crypto.randomBytes(length);
+
+  const randomPassword = buffer.toString('hex');
+
+  return randomPassword;
+}
+
 class UserController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      const { username, email, password, telefone, endereco } = req.body;
+      const { username, email, password, telefone, cep, estado, cidade, bairro, logradouro, numero_casa } = req.body;
 
-      if (!username || !email || !password || !telefone || !endereco) {
+      if (!username || !email || !password || !telefone || !cep || !estado || !cidade || !bairro || !logradouro || !numero_casa) {
         return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
       }
 
@@ -30,7 +43,12 @@ class UserController {
         email,
         password: hashedPassword,
         telefone,
-        endereco
+        cep,
+        estado,
+        bairro,
+        cidade,
+        logradouro,
+        numero_casa
       });
 
       res.status(201).json({ message: 'Usuario cadastrado com sucesso.' });
@@ -57,7 +75,37 @@ class UserController {
 
     const token = jwt.sign({ userId: user.id }, 'chave_secreta', { expiresIn: '1h' });
 
-    res.status(200).json({ message: 'Autenticação bem-sucedida', username: user.username, token });
+    res.status(200).json({ message: 'Autenticação bem-sucedida', username: user.username, imageUser: user.imageUser, token });
+  };
+
+  async authUserGoogle(req: Request, res: Response) {
+    const { sub, picture, name, email } = req.body;
+    const user = await User.findOne({ where: { googleID: sub } });
+
+    if (!user) {
+      const existingUser = await User.findOne({ where: { email } });
+
+      if (existingUser) {
+        return res.status(400).json({ error: 'Este email já está em uso.' });
+      }
+
+      const randomPassword = generateRandomPassword(10);
+      const password = await bcrypt.hash(randomPassword, 10);
+      const newUser = await User.create({
+        googleID: sub,
+        imageUser: picture,
+        username: name,
+        email,
+        password
+      });
+
+      const token = jwt.sign({ userId: newUser.id }, 'chave_secreta', { expiresIn: '1h' });
+      return res.status(200).json({ message: 'Autenticação bem-sucedida', username: newUser.username, imageUser: newUser.imageUser, token });
+    }
+
+
+    const token = jwt.sign({ userId: user.id }, 'chave_secreta', { expiresIn: '1h' });
+    res.status(200).json({ message: 'Autenticação bem-sucedida', username: user.username, imageUser: user.imageUser, token });
   };
 
   async findAllUsers(req: Request, res: Response) {
@@ -110,8 +158,12 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { username, email, password, telefone, endereco } = req.body;
+      const { username, email, telefone, cep, estado, cidade, bairro, logradouro, numero_casa } = req.body;
       const userId = req.body.userId;
+
+      if (!username || !email || !telefone || !cep || !estado || !cidade || !bairro || !logradouro || !numero_casa) {
+        return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+      }
 
       const user = await User.findByPk(id);
 
@@ -129,22 +181,24 @@ class UserController {
         if (existingUser && existingUser.id !== user.id) {
           return res.status(400).json({ error: 'Este email já está em uso.' });
         }
-        else{
+        else {
           user.email = email
         }
       }
 
-      if (username) {
-        user.username = username;
-      }
-      if (telefone) {
-        user.telefone = telefone;
-      }
-      if (endereco) {
-        user.endereco = endereco;
+      const updateUserInfo = {
+        username,
+        email,
+        telefone,
+        cep,
+        estado,
+        cidade,
+        bairro,
+        logradouro,
+        numero_casa
       }
 
-      await user.save();
+      await user.update(updateUserInfo);
 
       return res.status(200).json({ message: 'Usuario Editado com sucesso.' });
     } catch (error) {
