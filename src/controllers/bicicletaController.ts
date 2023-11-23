@@ -214,7 +214,7 @@ class BicicletaController {
 
       await bicicleta.destroy();
 
-      return res.status(204).send();
+      return res.status(202).json({ message: 'Bicicleta deletada com sucesso.' })
     } catch (error) {
       console.error('Erro ao excluir uma bicicleta:', error);
       return res.status(500).json({ error: 'Erro interno do servidor.' });
