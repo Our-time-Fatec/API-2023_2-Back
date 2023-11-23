@@ -291,6 +291,59 @@ class LocacaoController {
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
+
+  async confirmarPagamento(req: Request, res: Response) {
+    try {
+      const { idLocacao } = req.params;
+      const userId = req.body.userId
+
+      const locacao = await Locacao.findByPk(idLocacao, {
+        include: [
+          {
+              model: Bicicleta, as: 'bicicleta', include: [
+                  { model: Marca, as: 'marca' },
+                  { model: Modalidade, as: 'modalidade' },
+                  {
+                      model: User,
+                      as: 'dono',
+                      attributes: {
+                          exclude: ['password'],
+                      },
+                  },
+              ],
+          },
+      ],
+      });
+
+      if (!locacao) {
+        return res.status(404).json({ error: 'Locação não encontrada' });
+      }
+
+
+      if (locacao.bicicleta.donoId !== userId) {
+        return res.status(403).json({ error: 'Usuário não autorizado!' });
+      }
+
+      const locatario = await User.findByPk(locacao.locatarioId);
+
+      if (!locatario) {
+          return res.status(400).json({ error: 'Locatário não existe' })
+      }
+
+      locacao.isAtivo = false;
+      locatario.isAlugando = false;
+
+      await locacao.save();
+      await locatario.save();
+
+      return res.status(200).json({ message: "Locação foi encerrada com sucesso!" });
+
+    } catch (error) {
+      console.error('Erro ao aceitar a solicitação.', error);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+
 }
 
 export default new LocacaoController();

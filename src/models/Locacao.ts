@@ -16,6 +16,8 @@ class Locacao extends Model {
   public DiaouHora!: DouH;
   public valorTotal!: number;
   public createdAt!: Date;
+  public bicicleta!: Bicicleta;
+
 }
 
 Locacao.init(
