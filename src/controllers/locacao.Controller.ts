@@ -247,7 +247,7 @@ class LocacaoController {
   async encerrarLocacao(req: Request, res: Response) {
     try {
       const { idLocacao } = req.params;
-      const { avaliacao } = req.body;
+      const { avaliacaoDono } = req.body;
       const userId = req.body.userId
 
       const locacao = await Locacao.findByPk(idLocacao);
@@ -267,7 +267,7 @@ class LocacaoController {
       }
 
       locacao.isBikeDevolvida = true;
-      locacao.avaliacaoDono = avaliacao;
+      locacao.avaliacaoDono = avaliacaoDono;
       bicicleta.isAlugada = false;
 
       const dataAtual = new Date();
