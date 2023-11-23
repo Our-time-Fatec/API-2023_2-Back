@@ -254,19 +254,19 @@ class LocacaoController {
       const locacao = await Locacao.findByPk(idLocacao, {
         include: [
           {
-              model: Bicicleta, as: 'bicicleta', include: [
-                  { model: Marca, as: 'marca' },
-                  { model: Modalidade, as: 'modalidade' },
-                  {
-                      model: User,
-                      as: 'dono',
-                      attributes: {
-                          exclude: ['password'],
-                      },
-                  },
-              ],
+            model: Bicicleta, as: 'bicicleta', include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              {
+                model: User,
+                as: 'dono',
+                attributes: {
+                  exclude: ['password'],
+                },
+              },
+            ],
           },
-      ],
+        ],
       });
 
       if (!locacao) {
@@ -303,7 +303,7 @@ class LocacaoController {
 
       const teste = await avaliacaoController.updateAvaliacoes(locacao.bicicleta.donoId, locacao.bicicletaId)
 
-      return res.status(200).json(teste);
+      return res.status(200).json({ message: "Locação foi encerrada com sucesso!" });
 
     } catch (error) {
       console.error('Erro ao encerrar locação!.', error);
@@ -319,19 +319,19 @@ class LocacaoController {
       const locacao = await Locacao.findByPk(idLocacao, {
         include: [
           {
-              model: Bicicleta, as: 'bicicleta', include: [
-                  { model: Marca, as: 'marca' },
-                  { model: Modalidade, as: 'modalidade' },
-                  {
-                      model: User,
-                      as: 'dono',
-                      attributes: {
-                          exclude: ['password'],
-                      },
-                  },
-              ],
+            model: Bicicleta, as: 'bicicleta', include: [
+              { model: Marca, as: 'marca' },
+              { model: Modalidade, as: 'modalidade' },
+              {
+                model: User,
+                as: 'dono',
+                attributes: {
+                  exclude: ['password'],
+                },
+              },
+            ],
           },
-      ],
+        ],
       });
 
       if (!locacao) {
@@ -346,7 +346,7 @@ class LocacaoController {
       const locatario = await User.findByPk(locacao.locatarioId);
 
       if (!locatario) {
-          return res.status(400).json({ error: 'Locatário não existe' })
+        return res.status(400).json({ error: 'Locatário não existe' })
       }
 
       locacao.isAtivo = false;
